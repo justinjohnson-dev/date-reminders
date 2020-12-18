@@ -32,7 +32,7 @@ class User extends Component {
         console.log('hello??')
         console.log(this.state.name)
         console.log(this.state.phone_number)
-        axios.post(`http://localhost:5000/api/v1/user`, formData)
+        axios.post(`/api/v1/user`, formData)
             .then(res => {
                 console.log('removed user from liked post');
             })
