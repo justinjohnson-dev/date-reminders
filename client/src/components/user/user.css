@@ -1,9 +1,17 @@
 .user-form {
     width: 12%;
     margin: 0px auto;
-    margin-top: 20%;
+    margin-top: 10%;
 }
 
 .center-user {
     margin: 0px auto;
+}
+
+.fa-mobile-alt {
+    transition: transform 0.5s ease 0s;
+}
+
+.fa-mobile-alt:hover {
+    transform: rotate(360deg);
 }

@@ -1,0 +1,21 @@
+.navbar-name {
+    color: white;
+    margin-top:5%;
+    font-weight: bold;
+}
+
+.navbar-info {
+    text-decoration: none;
+    color:white;
+}
+
+.navbar-info:hover {
+    text-transform: uppercase;
+    color: white;
+}
+
+nav {
+    max-height: 5%;
+    max-width: 75%;
+    margin: 0px auto;
+}

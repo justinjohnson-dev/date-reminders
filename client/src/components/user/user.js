@@ -66,7 +66,8 @@ class User extends Component {
         return (
             <form noValidate className="user-form" onSubmit={this.onSubmit}>
                 <div className="center-user">
-                    <h5 className='login-alert login-banners'>Enter Your Name and Number<i className="fas fa-sign-in-alt"></i></h5>
+                    <h5 className='login-alert login-banners'>Enter Name & Number <i class="fas fa-mobile-alt"></i></h5>
+                    <p></p>
                     <div className="name-div">
                         <TextField
                             noValidate
