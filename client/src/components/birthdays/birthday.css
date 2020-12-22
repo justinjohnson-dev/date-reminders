@@ -1,9 +1,10 @@
 .birthday-entry {
     margin: 0px auto;
-    max-width: 35%;
+    max-width: 100%;
     max-height: 350px;
-    margin-top: 10%;
+    margin-top: 5%;
     overflow-y:scroll;
+    padding: 10px;
 }
 
 .box {
@@ -21,4 +22,27 @@
   
 .mr10 {
     margin-right: 10px;
+}
+
+.birthday-adds {
+    width: 20%;
+    margin: 0px auto;
+    margin-top: 10%;
+    text-align: center;
+}
+
+.modal-style {
+    text-align: center;
+}
+
+.ReactModal__Content {
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    margin: 0px auto;
+    margin-top: 10%;
+    overflow: auto;
+    background-color: #fff;
+    -webkit-transform: translate(-50,-50%);
+    transform: translate(-50,-50%);
 }

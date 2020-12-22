@@ -51,12 +51,20 @@ class User extends Component {
 
             axios.post(`/api/v1/user`, formData)
                 .then(res => {
+                    let userInfo = [this.state.name, this.state.phone_number];
+                    console.log(userInfo)
+                    localStorage.setItem("user", userInfo);
                     console.log('Name and number added');
                 })
 
             // reset form
             this.setState({ name: "", phone_number: "" });
-            this.props.history.push('/birthday');
+            // this.props.history.push('/birthday');
+            this.props.history.push({
+                pathname: '/birthday',
+                data: [this.state.name, this.state.phone_number]
+            })
+
         } else {
             console.log('Invalid Form');
         }
@@ -64,6 +72,7 @@ class User extends Component {
 
     render() {
         const { errors } = this.state;
+        console.log(this.state)
         return (
             <form noValidate className="user-form" onSubmit={this.onSubmit}>
                 <div className="center-user">

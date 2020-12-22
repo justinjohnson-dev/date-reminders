@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import User from './components/user/user';
 import Header from './components/banner/banner';
 import Footer from './components/footer/footer';
-import Birthday from './components/birthdays/birthday';
+import Tester from './components/birthdays/test';
 
 
 class App extends Component {
@@ -12,7 +12,7 @@ class App extends Component {
       <Router>
         <Header />
         <Route exact path="/" component={User} />
-        <Route exact path="/birthday" component={Birthday} />
+        <Route exact path="/birthday" component={Tester} />
         <Footer />
       </Router>
     );
