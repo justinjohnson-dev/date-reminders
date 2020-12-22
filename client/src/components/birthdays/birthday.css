@@ -1,0 +1,24 @@
+.birthday-entry {
+    margin: 0px auto;
+    max-width: 35%;
+    max-height: 350px;
+    margin-top: 10%;
+    overflow-y:scroll;
+}
+
+.box {
+    margin-bottom: 40px;
+}
+  
+.btn-box {
+    margin-left: 10px;
+    display: inline-block;
+}
+  
+.ml10 {
+    margin-left: 10px;
+}
+  
+.mr10 {
+    margin-right: 10px;
+}

@@ -11,6 +11,9 @@ const userSchema = new Schema({
     phone_number: {
         type: String,
         required: true
+    },
+    birthdays: {
+        type: Array
     }
 });
 

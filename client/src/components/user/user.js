@@ -56,6 +56,7 @@ class User extends Component {
 
             // reset form
             this.setState({ name: "", phone_number: "" });
+            this.props.history.push('/birthday');
         } else {
             console.log('Invalid Form');
         }
