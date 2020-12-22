@@ -4,10 +4,10 @@
     margin-top: 10%;
 }
 
-@media only screen and (max-width: 550px) {
+@media only screen and (max-width: 600px) {
     .user-form {
         width: 75%;
-        margin-top: 50%;
+        margin-top: 40%;
     }
   }
 
