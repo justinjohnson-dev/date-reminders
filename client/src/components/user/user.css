@@ -1,12 +1,30 @@
 .user-form {
-    width: 12%;
+    width: 16%;
     margin: 0px auto;
     margin-top: 10%;
 }
 
-.center-user {
-    margin: 0px auto;
-}
+@media only screen and (max-width: 550px) {
+    .user-form {
+        width: 75%;
+        margin-top: 50%;
+    }
+  }
+
+  @media only screen and (max-width: 1024px) and (min-width: 768px) {
+    .user-form {
+        width: 50%;
+        margin-top: 40%;
+    }
+  }
+
+  @media only screen and (max-width: 1350px) and (min-width: 1024px) {
+    .user-form {
+        width: 50%;
+        margin-top: 50%;
+    }
+  }
+  
 
 .fa-mobile-alt {
     transition: transform 0.5s ease 0s;

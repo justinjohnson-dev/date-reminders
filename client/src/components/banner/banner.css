@@ -9,6 +9,12 @@
     color:white;
 }
 
+@media only screen and (max-width: 550px) {
+    .navbar-info {
+        margin-right: 0.75%;
+    }
+  }
+
 .navbar-info:hover {
     text-transform: uppercase;
     color: white;
@@ -16,6 +22,6 @@
 
 nav {
     max-height: 5%;
-    max-width: 75%;
+    /* max-width: 75%; */
     margin: 0px auto;
 }

@@ -70,6 +70,7 @@ class User extends Component {
                     <p></p>
                     <div className="name-div">
                         <TextField
+                            style={{ width: "100%" }}
                             noValidate
                             onChange={this.onChange}
                             value={this.state.name}
@@ -87,6 +88,7 @@ class User extends Component {
                     </div>
                     <div className="phone-number-div">
                         <TextField
+                            style={{ width: "100%" }}
                             noValidate
                             onChange={this.onChange}
                             value={this.state.phone_number}
