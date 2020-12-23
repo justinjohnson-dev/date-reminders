@@ -15,6 +15,10 @@ class User extends Component {
         };
     }
 
+    clearStorage = () => {
+        localStorage.setItem("user", "");
+    }
+
     onChange = e => {
         this.setState({ [e.target.id]: e.target.value });
     };
@@ -36,7 +40,14 @@ class User extends Component {
         return isValid;
     }
 
+    refreshPage = () => {
+        window.location.reload(false);
+    }
+
     onSubmit = e => {
+        // clear local storage first
+        localStorage.setItem("user", "");
+
         e.preventDefault();
 
         const isValid = this.formValidation();
@@ -59,7 +70,6 @@ class User extends Component {
 
             // reset form
             this.setState({ name: "", phone_number: "" });
-            // this.props.history.push('/birthday');
             this.props.history.push({
                 pathname: '/birthday',
                 data: [this.state.name, this.state.phone_number]

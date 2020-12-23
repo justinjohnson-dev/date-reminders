@@ -29,7 +29,6 @@ class Tester extends Component {
 
     toggleModal = () => {
         this.setState({ isOpen: !this.state.isOpen });
-
     }
 
     render() {
