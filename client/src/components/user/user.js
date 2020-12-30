@@ -60,13 +60,17 @@ class User extends Component {
             formData.append('name', this.state.name);
             formData.append('phone_number', this.state.phone_number);
 
-            axios.post(`/api/v1/user`, formData)
-                .then(res => {
-                    let userInfo = [this.state.name, this.state.phone_number];
-                    console.log(userInfo)
-                    localStorage.setItem("user", userInfo);
-                    console.log('Name and number added');
-                })
+            // axios.post(`/api/v1/user`, formData)
+            //     .then(res => {
+            //         let userInfo = [this.state.name, this.state.phone_number];
+            //         console.log(userInfo)
+            //         localStorage.setItem("user", userInfo);
+            //         console.log('Name and number added');
+            //     })
+
+            // send user data to storage
+            let userInfo = [this.state.name, this.state.phone_number];
+            localStorage.setItem("user", userInfo);
 
             // reset form
             this.setState({ name: "", phone_number: "" });
