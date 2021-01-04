@@ -10,10 +10,22 @@
 .box {
     margin-bottom: 40px;
 }
+
+.birthday-edit {
+    display: flex;
+    flex-direction: row;
+    width: 50%;
+    margin: 0px auto;
+    margin-top: 20px;
+}
+
+.close-modal {
+    margin-top: 20px;
+}
   
 .btn-box {
     margin-left: 10px;
-    display: inline-block;
+    margin-top: 5px;
 }
   
 .ml10 {
@@ -33,6 +45,7 @@
 
 .modal-style {
     text-align: center;
+
 }
 
 .ReactModal__Content {

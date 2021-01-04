@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Modal from "react-modal";
 import { TextField, Button } from '@material-ui/core';
 import './birthday.css';
+import Sidebar from "../sidebar/sidebar";
 
 
 class Tester extends Component {
@@ -13,7 +14,7 @@ class Tester extends Component {
             userPhone: "",
             birthdayName: "",
             birthdayDate: "",
-            birthdays: [{ birthdayName: "", birthdayDate: "" }],
+            birthdays: [],
             errors: {}
         };
     }
@@ -37,35 +38,52 @@ class Tester extends Component {
         this.setState({ [e.target.id]: e.target.value });
     };
 
-    handleAddClick = () => {
-        console.log(this.state.birthdayName)
-        console.log(this.state.birthdayDate)
+    formValidation = () => {
+        let isValid = true;
+        const errors = {};
 
-        // this.setState(state => {
-        //     const birthdays = [...state.birthdays, state.birthdayName, ', ', state.birthdayDate];
+        if (this.state.birthdayName.trim().length < 1) {
+            errors.birthdayNameLength = "Name is required!"
+            isValid = false;
+        }
+        if (this.state.birthdayDate.trim().length < 1) {
+            errors.birthdayDateLength = "Must add a date!"
+            isValid = false;
+        }
 
-        //     return {
-        //         birthdays,
-        //         value: '',
-        //     };
-        // });
-
-        this.setState({
-            birthdays: [{ birthdayName: this.state.birthdayName, birthdayDate: this.state.birthdayDate }]
-        })
-
-        console.log(this.state.birthdays)
+        this.setState({ errors });
+        return isValid;
     }
 
-    // handle click event of the Remove button
-    // const handleRemoveClick = index => {
-    //     const list = [...inputList];
-    //     list.splice(index, 1);
-    //     setInputList(list);
-    // };
 
+    handleAddClick = () => {
+        let birthdayName = this.state.birthdayName;
+        let birthdayDate = this.state.birthdayDate;
+
+        // validate birthday
+        const isValid = this.formValidation();
+
+        if (isValid) {
+            let newBirthday = {
+                birthdayName: birthdayName,
+                birthdayDate: birthdayDate
+            }
+
+            this.state.birthdays.push(newBirthday);
+
+            // reset state
+            this.setState({
+                birthdayName: "",
+                birthdayDate: ""
+            })
+        } else {
+            console.log('Invalid Form');
+        }
+    }
 
     render() {
+        const { errors } = this.state;
+
         return (
             <div className="birthday-adds">
                 <div className="welcome-banner">
@@ -87,6 +105,7 @@ class Tester extends Component {
                         <div>Add / Edit your saved birthdays!</div>
                         <div className="birthday-edit">
                             <TextField
+                                style={{ padding: "5px" }}
                                 name="birthdayName"
                                 placeholder="Name"
                                 value={this.state.birthdayName}
@@ -97,7 +116,11 @@ class Tester extends Component {
                                 size="small"
                                 InputProps={{ disableUnderline: true }}
                             />
+                            {errors.birthdayNameLength &&
+                                <p style={{ color: "red" }}>{errors.birthdayNameLength}</p>
+                            }
                             <TextField
+                                style={{ padding: "5px" }}
                                 type="date"
                                 name="birthdayDate"
                                 placeholder="Name"
@@ -107,20 +130,21 @@ class Tester extends Component {
                                 variant="outlined"
                                 size="small"
                             />
+                            {errors.birthdayDateLength &&
+                                <p style={{ color: "red" }}>{errors.birthdayDateLength}</p>
+                            }
+                            <div className="btn-box">
+                                <Button onClick={this.handleAddClick}>Add</Button>
+                            </div>
                         </div>
-                        <div className="btn-box">
-                            <Button onClick={this.handleAddClick}>Add</Button>
-
-                            {/* {inputList.length !== 1 &&
-                                <Button className="mr10" onClick={() => handleRemoveClick(i)}>Remove</Button>}
-                            {inputList.length - 1 === i &&
-                                <Button onClick={handleAddClick}>Add</Button>} */}
+                        <div className="close-modal">
+                            <Button type="submit" variant="contained" onClick={this.toggleModal} color="primary">
+                                Close Modal
+                            </Button>
                         </div>
-                        <Button type="submit" variant="contained" onClick={this.toggleModal} color="primary">
-                            Close Modal
-                        </Button>
                     </div>
                 </Modal>
+                <Sidebar birthdays={this.state.birthdays} />
             </div>
         );
     }

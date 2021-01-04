@@ -4,6 +4,7 @@ import User from './components/user/user';
 import Header from './components/banner/banner';
 import Footer from './components/footer/footer';
 import Tester from './components/birthdays/test';
+import Sidebar from './components/sidebar/sidebar';
 
 
 class App extends Component {
@@ -14,6 +15,7 @@ class App extends Component {
         <Route exact path="/" component={User} />
         <Route exact path="/birthday" component={Tester} />
         <Footer />
+        <Sidebar />
       </Router>
     );
   }
