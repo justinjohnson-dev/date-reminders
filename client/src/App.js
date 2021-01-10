@@ -3,8 +3,8 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import User from './components/user/user';
 import Header from './components/banner/banner';
 import Footer from './components/footer/footer';
-import Tester from './components/birthdays/test';
-import Sidebar from './components/sidebar/sidebar';
+import BirthdayHome from './components/birthdays/birthdayHome';
+import EditBirthday from './components/birthdays/editBirthdays';
 
 
 class App extends Component {
@@ -13,9 +13,9 @@ class App extends Component {
       <Router>
         <Header />
         <Route exact path="/" component={User} />
-        <Route exact path="/birthday" component={Tester} />
+        <Route exact path="/birthday" component={BirthdayHome} />
+        <Route exact path="/editBirthdays" component={EditBirthday} />
         <Footer />
-        <Sidebar />
       </Router>
     );
   }
