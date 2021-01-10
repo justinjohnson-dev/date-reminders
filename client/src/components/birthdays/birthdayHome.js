@@ -112,15 +112,17 @@ class BirthdayHome extends Component {
         return (
             <div className="birthday-adds">
                 <div className="welcome-banner">
-                    <p>Welcome, <span>{this.state.userName}!</span></p>
-                    <p>Phone Number - <span>{this.state.userPhone}</span></p>
+                    <h2>Welcome, <span>{this.state.userName}!</span></h2>
+                    <h2>Phone Number - <span>{this.state.userPhone}</span></h2>
                 </div>
 
                 <div>
-                    <h1 id='title'>Birthday List</h1>
+                    <h3 id='title'>Birthday List</h3>
                     <table id='birthdays'>
                         <tbody>
-                            {/* <tr>{this.renderTableHeader()}</tr> */}
+                            {this.state.birthdays.length > 0 &&
+                                <tr>{this.renderTableHeader()}</tr>
+                            }
                             {this.renderTableData()}
                         </tbody>
                     </table>

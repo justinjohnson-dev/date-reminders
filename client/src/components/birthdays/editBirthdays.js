@@ -66,6 +66,10 @@ class EditBirthday extends Component {
         let birthdayName = this.state.birthdayName;
         let birthdayDate = this.state.birthdayDate;
         let id = 1;
+        let lastBirthdayIndex = null;
+        let lastBirthdayId = null;
+
+        const { birthdays } = this.state;
         // Figure out a way to increment the ID for each objec that
         // gets added to our array
 
@@ -73,15 +77,24 @@ class EditBirthday extends Component {
         const isValid = this.formValidation();
 
         if (isValid) {
+
+            // find last id increment new by one
+            // TODO: when object is remove fix the ID's to be in right order
+            if (birthdays.length > 0) {
+                // what is the last index ID?
+                lastBirthdayIndex = birthdays.length - 1;
+                lastBirthdayId = birthdays[lastBirthdayIndex].id;
+                console.log("lastBirthdayId")
+                console.log(lastBirthdayId)
+            }
+
             let newBirthday = {
-                id: id,
+                id: lastBirthdayId + 1,
                 birthdayName: birthdayName,
                 birthdayDate: birthdayDate
             }
 
             this.state.birthdays.push(newBirthday);
-            console.log('NEW BIRTHDYA')
-            console.log(this.state.birthdays)
 
             // reset state
             this.setState({
@@ -101,12 +114,23 @@ class EditBirthday extends Component {
                     <td>{id}</td>
                     <td>{birthdayName}</td>
                     <td>{birthdayDate}</td>
-                    <td><button onClick={this.removeElement}>Remove</button></td>
+                    <td><button onClick={() => this.removeElement(id)}>Remove</button></td>
                 </tr>
             )
         })
     }
 
+    removeElement = (id) => {
+        const { birthdays } = this.state;
+        Object.keys(birthdays).map((key, i) => {
+            if (birthdays[key].id === id) {
+                const newList = birthdays.filter((item) => item.id != id);
+                this.setState({
+                    birthdays: newList
+                });
+            }
+        })
+    }
 
     renderTableHeader() {
         let header = Object.keys(this.state.birthdays[0])
