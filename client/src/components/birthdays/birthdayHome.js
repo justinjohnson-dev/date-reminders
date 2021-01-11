@@ -98,16 +98,22 @@ class BirthdayHome extends Component {
     }
 
     renderTableData() {
-        return this.state.birthdays.map((birthday, index) => {
-            const { id, birthdayName, birthdayDate } = birthday //destructuring
+        if (this.state.birthdays != undefined) {
+            return this.state.birthdays.map((birthday, index) => {
+                const { id, birthdayName, birthdayDate } = birthday //destructuring
+                return (
+                    <tr key={id}>
+                        <td>{id}</td>
+                        <td>{birthdayName}</td>
+                        <td>{birthdayDate}</td>
+                    </tr>
+                )
+            })
+        } else {
             return (
-                <tr key={id}>
-                    <td>{id}</td>
-                    <td>{birthdayName}</td>
-                    <td>{birthdayDate}</td>
-                </tr>
+                <p>No current birthdays!</p>
             )
-        })
+        }
     }
 
 
@@ -135,12 +141,10 @@ class BirthdayHome extends Component {
                     <table id='birthdays'>
                         {this.state.dataUpdated == true &&
                             <tbody>
-                                {this.state.birthdays.length > 0 &&
+                                {this.state.birthdays != undefined && this.state.birthdays.length > 0 &&
                                     <tr>{this.renderTableHeader()}</tr>
                                 }
-
                                 {this.renderTableData()}
-
                             </tbody>
                         }
                     </table>

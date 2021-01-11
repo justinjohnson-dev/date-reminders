@@ -113,22 +113,28 @@ class EditBirthday extends Component {
 
         // re-indexs every time table renders 
         // in case something was deleted
-        Object.keys(birthdays).map((key, i) => {
-            birthdays[key].id = iterator;
-            iterator++;
-        })
-
-        return birthdays.map((birthday, index) => {
-            const { id, birthdayName, birthdayDate } = birthday //destructuring
+        if (birthdays != undefined) {
+            Object.keys(birthdays).map((key, i) => {
+                birthdays[key].id = iterator;
+                iterator++;
+            })
+    
+            return birthdays.map((birthday, index) => {
+                const { id, birthdayName, birthdayDate } = birthday //destructuring
+                return (
+                    <tr key={id}>
+                        <td>{id}</td>
+                        <td>{birthdayName}</td>
+                        <td>{birthdayDate}</td>
+                        <td><button onClick={() => this.removeElement(id)} className="button create-button create-button"><span>Remove</span></button></td>
+                    </tr>
+                )
+            })
+        } else {
             return (
-                <tr key={id}>
-                    <td>{id}</td>
-                    <td>{birthdayName}</td>
-                    <td>{birthdayDate}</td>
-                    <td><button onClick={() => this.removeElement(id)} className="button create-button create-button"><span>Remove</span></button></td>
-                </tr>
+                <p>No birthdays</p>
             )
-        })
+        }
     }
 
     removeElement = (id) => {
@@ -157,10 +163,14 @@ class EditBirthday extends Component {
             birthdays: this.state.birthdays
         };
 
-        axios.post(`/api/v1/userBirthdays`, userInfo)
-            .then(res => {
-                console.log(userInfo)
-            })
+        if (this.state.birthdays != undefined) {
+            axios.post(`/api/v1/userBirthdays`, userInfo)
+                .then(res => {
+                    console.log(userInfo)
+                })
+        } else {
+            console.log('Sending no data - no birthdays were added')
+        }
     }
 
     render() {
@@ -208,7 +218,7 @@ class EditBirthday extends Component {
                     <h3 id='title'>Edit Birthdays</h3>
                     <table id='birthdays'>
                         <tbody>
-                            {this.state.birthdays.length > 0 &&
+                            {this.state.birthdays != undefined && this.state.birthdays.length > 0 &&
                                 <tr>{this.renderTableHeader()}</tr>
                             }
                             {this.renderTableData()}
