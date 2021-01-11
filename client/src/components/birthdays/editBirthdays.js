@@ -107,14 +107,25 @@ class EditBirthday extends Component {
     }
 
     renderTableData() {
-        return this.state.birthdays.map((birthday, index) => {
+        // update ID for changed birthdays edited remove etc. 
+        const { birthdays } = this.state;
+        let iterator = 1;
+
+        // re-indexs every time table renders 
+        // in case something was deleted
+        Object.keys(birthdays).map((key, i) => {
+            birthdays[key].id = iterator;
+            iterator++;
+        })
+
+        return birthdays.map((birthday, index) => {
             const { id, birthdayName, birthdayDate } = birthday //destructuring
             return (
                 <tr key={id}>
                     <td>{id}</td>
                     <td>{birthdayName}</td>
                     <td>{birthdayDate}</td>
-                    <td><button onClick={() => this.removeElement(id)}>Remove</button></td>
+                    <td><button onClick={() => this.removeElement(id)} className="button create-button create-button"><span>Remove</span></button></td>
                 </tr>
             )
         })
@@ -157,7 +168,7 @@ class EditBirthday extends Component {
 
         return (
             <div className="birthday-adds">
-                <div className="description">Add / Edit your saved birthdays!</div>
+                <div className="description">Add new Birthday!</div>
                 <div className="birthday-edit">
                     <TextField
                         style={{ padding: "5px" }}
@@ -194,7 +205,7 @@ class EditBirthday extends Component {
                 </div>
 
                 <div>
-                    <h3 id='title'>Edit Birthday list</h3>
+                    <h3 id='title'>Edit Birthdays</h3>
                     <table id='birthdays'>
                         <tbody>
                             {this.state.birthdays.length > 0 &&
@@ -206,7 +217,7 @@ class EditBirthday extends Component {
                 </div>
 
                 <div className="confirm">
-                    <Link to="/birthday">
+                    <Link to="/birthday" style={{ textDecoration: 'none' }}>
                         <Button variant="contained" onClick={this.uploadToMongo} color="primary" >
                             Confirm
                     </Button>

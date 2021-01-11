@@ -112,8 +112,9 @@ class BirthdayHome extends Component {
         return (
             <div className="birthday-adds">
                 <div className="welcome-banner">
-                    <h2>Welcome, <span>{this.state.userName}!</span></h2>
-                    <h2>Phone Number - <span>{this.state.userPhone}</span></h2>
+                    <h2 className="welcome-message">Welcome, <span>{this.state.userName}!</span></h2>
+                    <h5>Phone Number - <span>{this.state.userPhone}</span></h5>
+                    <h6><Link to="/"><button className="button create-button create-button"><span>Not you?</span></button></Link></h6>
                 </div>
 
                 <div>
@@ -128,11 +129,13 @@ class BirthdayHome extends Component {
                     </table>
                 </div>
 
-                <Link to={{ pathname: "/editBirthdays" }}>
-                    <Button variant="contained" color="primary">
-                        Edit Birthdays
-                    </Button>
-                </Link>
+                <div className="confirm">
+                    <Link to={{ pathname: "/editBirthdays" }} style={{ textDecoration: 'none' }}>
+                        <Button variant="contained" color="primary">
+                            Edit Birthdays
+                        </Button>
+                    </Link>
+                </div>
 
             </div>
         );
