@@ -86,7 +86,6 @@ class User extends Component {
 
     render() {
         const { errors } = this.state;
-        console.log(this.state)
         return (
             <form noValidate className="user-form" onSubmit={this.onSubmit}>
                 <div className="center-user">

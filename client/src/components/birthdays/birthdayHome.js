@@ -14,6 +14,7 @@ class BirthdayHome extends Component {
             userPhone: "",
             birthdayName: "",
             birthdayDate: "",
+            dataUpdated: false,
             birthdays: [],
             errors: {}
         };
@@ -34,6 +35,7 @@ class BirthdayHome extends Component {
         this.setState({
             userName: userName,
             userPhone: userPhone,
+            dataUpdated: true
         })
     }
 
@@ -84,6 +86,17 @@ class BirthdayHome extends Component {
         }
     }
 
+    loadData() {
+        let currentComponent = this;
+        axios.get(`/api/v1/birthdays/${this.state.userPhone}`)
+            .then(function (res) {
+                currentComponent.setState({
+                    birthdays: res.data.birthdays
+                })
+            });
+
+    }
+
     renderTableData() {
         return this.state.birthdays.map((birthday, index) => {
             const { id, birthdayName, birthdayDate } = birthday //destructuring
@@ -120,12 +133,16 @@ class BirthdayHome extends Component {
                 <div>
                     <h3 id='title'>Birthday List</h3>
                     <table id='birthdays'>
-                        <tbody>
-                            {this.state.birthdays.length > 0 &&
-                                <tr>{this.renderTableHeader()}</tr>
-                            }
-                            {this.renderTableData()}
-                        </tbody>
+                        {this.state.dataUpdated == true &&
+                            <tbody>
+                                {this.state.birthdays.length > 0 &&
+                                    <tr>{this.renderTableHeader()}</tr>
+                                }
+
+                                {this.renderTableData()}
+
+                            </tbody>
+                        }
                     </table>
                 </div>
 
