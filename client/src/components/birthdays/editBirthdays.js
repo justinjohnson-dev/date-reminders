@@ -68,10 +68,7 @@ class EditBirthday extends Component {
         let id = 1;
         let lastBirthdayIndex = null;
         let lastBirthdayId = null;
-
-        const { birthdays } = this.state;
-        // Figure out a way to increment the ID for each objec that
-        // gets added to our array
+        let { birthdays } = this.state;
 
         // validate birthday
         const isValid = this.formValidation();
@@ -80,27 +77,49 @@ class EditBirthday extends Component {
 
             // find last id increment new by one
             // TODO: when object is remove fix the ID's to be in right order
-            if (birthdays.length > 0) {
+            if (birthdays != undefined && birthdays.length > 0) {
                 // what is the last index ID?
                 lastBirthdayIndex = birthdays.length - 1;
                 lastBirthdayId = birthdays[lastBirthdayIndex].id;
                 console.log("lastBirthdayId")
                 console.log(lastBirthdayId)
+                let newBirthday = {
+                    id: lastBirthdayId + 1,
+                    birthdayName: birthdayName,
+                    birthdayDate: birthdayDate
+                }
+
+                console.log(newBirthday)
+                this.state.birthdays.push(newBirthday);
+
+                // reset state
+                this.setState({
+                    birthdayName: "",
+                    birthdayDate: ""
+                })
+            } else {
+                let newBirthday = {
+                    id: 1,
+                    birthdayName: birthdayName,
+                    birthdayDate: birthdayDate
+                }
+
+                // console.log(birthdays)
+                // if (birthdays == undefined) {
+                //     birthdays = newBirthday
+                // }
+                // // birthdays.push(newBirthday);
+
+                console.log(newBirthday)
+                // reset state
+                this.setState({
+                    birthdayName: "",
+                    birthdayDate: "",
+                    birthdays: newBirthday
+                })
+
             }
 
-            let newBirthday = {
-                id: lastBirthdayId + 1,
-                birthdayName: birthdayName,
-                birthdayDate: birthdayDate
-            }
-
-            this.state.birthdays.push(newBirthday);
-
-            // reset state
-            this.setState({
-                birthdayName: "",
-                birthdayDate: ""
-            })
         } else {
             console.log('Invalid Form');
         }
@@ -118,7 +137,10 @@ class EditBirthday extends Component {
                 birthdays[key].id = iterator;
                 iterator++;
             })
-    
+
+            console.log('what?')
+            console.log(birthdays)
+            console.log(birthdays.length)
             return birthdays.map((birthday, index) => {
                 const { id, birthdayName, birthdayDate } = birthday //destructuring
                 return (
@@ -166,6 +188,7 @@ class EditBirthday extends Component {
         if (this.state.birthdays != undefined) {
             axios.post(`/api/v1/userBirthdays`, userInfo)
                 .then(res => {
+                    console.log("userInfo")
                     console.log(userInfo)
                 })
         } else {
@@ -227,7 +250,7 @@ class EditBirthday extends Component {
                 </div>
 
                 <div className="confirm">
-                    <Link to="/birthday" style={{ textDecoration: 'none' }}>
+                    <Link to={{ pathname: '/birthday', state: { birthdays: this.state.birthdays } }} style={{ textDecoration: 'none' }}>
                         <Button variant="contained" onClick={this.uploadToMongo} color="primary" >
                             Confirm
                     </Button>

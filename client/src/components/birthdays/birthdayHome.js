@@ -14,7 +14,6 @@ class BirthdayHome extends Component {
             userPhone: "",
             birthdayName: "",
             birthdayDate: "",
-            dataUpdated: false,
             birthdays: [],
             errors: {}
         };
@@ -25,18 +24,28 @@ class BirthdayHome extends Component {
         let userName = userInformation.substr(0, userInformation.indexOf(',')).trim();
         let userPhone = userInformation.substr(userInformation.indexOf(','), userInformation.length).replace(',', '').trim();
         let currentComponent = this;
-        axios.get(`/api/v1/birthdays/${userPhone}`)
-            .then(function (res) {
-                currentComponent.setState({
-                    birthdays: res.data.birthdays
-                })
-            });
 
-        this.setState({
-            userName: userName,
-            userPhone: userPhone,
-            dataUpdated: true
-        })
+        if (this.props.location.state != undefined) {
+            // set state if coming from props from edit screen
+            if (this.props.location.state.birthdays != undefined) {
+                this.setState({
+                    birthdays: this.props.location.state.birthdays
+                })
+            }
+        } else {
+            // first time viewing birthday home screen fetch data from DB
+            axios.get(`/api/v1/birthdays/${userPhone}`)
+                .then(function (res) {
+                    currentComponent.setState({
+                        birthdays: res.data.birthdays,
+                    })
+                });
+
+            this.setState({
+                userName: userName,
+                userPhone: userPhone,
+            })
+        }
     }
 
     onChange = e => {
@@ -98,8 +107,9 @@ class BirthdayHome extends Component {
     }
 
     renderTableData() {
-        if (this.state.birthdays != undefined) {
-            return this.state.birthdays.map((birthday, index) => {
+        let currentComponent = this;
+        if (currentComponent.state.birthdays != undefined) {
+            return currentComponent.state.birthdays.map((birthday, index) => {
                 const { id, birthdayName, birthdayDate } = birthday //destructuring
                 return (
                     <tr key={id}>
@@ -122,12 +132,10 @@ class BirthdayHome extends Component {
         return header.map((key, index) => {
             return <th key={index}>{key.toUpperCase()}</th>
         })
-
     }
 
     render() {
         const { errors } = this.state;
-
         return (
             <div className="birthday-adds">
                 <div className="welcome-banner">
@@ -135,29 +143,25 @@ class BirthdayHome extends Component {
                     <h5>Phone Number - <span>{this.state.userPhone}</span></h5>
                     <h6><Link to="/"><button className="button create-button create-button"><span>Not you?</span></button></Link></h6>
                 </div>
-
                 <div>
                     <h3 id='title'>Birthday List</h3>
                     <table id='birthdays'>
-                        {this.state.dataUpdated == true &&
-                            <tbody>
-                                {this.state.birthdays != undefined && this.state.birthdays.length > 0 &&
-                                    <tr>{this.renderTableHeader()}</tr>
-                                }
-                                {this.renderTableData()}
-                            </tbody>
-                        }
+                        <tbody>
+                            {this.state.birthdays != undefined && this.state.birthdays.length > 0 &&
+                                <tr>{this.renderTableHeader()}</tr>
+                            }
+                            {this.renderTableData()}
+                        </tbody>
+
                     </table>
                 </div>
-
                 <div className="confirm">
                     <Link to={{ pathname: "/editBirthdays" }} style={{ textDecoration: 'none' }}>
                         <Button variant="contained" color="primary">
                             Edit Birthdays
-                        </Button>
+                                    </Button>
                     </Link>
                 </div>
-
             </div>
         );
     }
