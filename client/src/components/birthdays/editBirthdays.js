@@ -60,8 +60,6 @@ class EditBirthday extends Component {
         return isValid;
     }
 
-
-
     handleAddClick = () => {
         let birthdayName = this.state.birthdayName;
         let birthdayDate = this.state.birthdayDate;
@@ -125,6 +123,53 @@ class EditBirthday extends Component {
         }
     }
 
+
+    // renderTableData() {
+    //     // update ID for changed birthdays edited remove etc. 
+    //     const { birthdays } = this.state;
+    //     let iterator = 1;
+
+    //     // re-indexs every time table renders 
+    //     // in case something was deleted
+    //     // console.log(birthdays.length)
+    //     if (birthdays != undefined) {
+    //         // Object.keys(birthdays).map((key, i) => {
+    //         //     birthdays[key].id = iterator;
+    //         //     iterator++;
+    //         // })
+    //         console.log('birthdays.length < 2')
+    //         // console.log(birthdays)
+
+    //         for (let i = 0; i < birthdays.length; i++) {
+    //             return (
+    //                 <tr key={birthdays[i].id}>
+    //                     <td>{birthdays[i].id}</td>
+    //                     <td>{birthdays[i].birthdayName}</td>
+    //                     <td>{birthdays[i].birthdayDate}</td>
+    //                     <td><button onClick={() => this.removeElement(birthdays[i].id)} className="button create-button create-button"><span>Remove</span></button></td>
+    //                 </tr>
+    //             )
+    //         }
+
+    //         // return birthdays.map((birthday, index) => {
+    //         //     const { id, birthdayName, birthdayDate } = birthday //destructuring
+    //         //     return (
+    //         //         <tr key={id}>
+    //         //             <td>{id}</td>
+    //         //             <td>{birthdayName}</td>
+    //         //             <td>{birthdayDate}</td>
+    //         //             <td><button onClick={() => this.removeElement(id)} className="button create-button create-button"><span>Remove</span></button></td>
+    //         //         </tr>
+    //         //     )
+    //         // })
+    //     } else {
+    //         return (
+    //             <p>No birthdays</p>
+    //         )
+    //     }
+    // }
+
+
     renderTableData() {
         // update ID for changed birthdays edited remove etc. 
         const { birthdays } = this.state;
@@ -132,26 +177,44 @@ class EditBirthday extends Component {
 
         // re-indexs every time table renders 
         // in case something was deleted
+        // console.log(birthdays.length)
         if (birthdays != undefined) {
-            Object.keys(birthdays).map((key, i) => {
-                birthdays[key].id = iterator;
-                iterator++;
-            })
-
-            console.log('what?')
-            console.log(birthdays)
+            console.log('birthdays')
             console.log(birthdays.length)
-            return birthdays.map((birthday, index) => {
-                const { id, birthdayName, birthdayDate } = birthday //destructuring
-                return (
-                    <tr key={id}>
-                        <td>{id}</td>
-                        <td>{birthdayName}</td>
-                        <td>{birthdayDate}</td>
-                        <td><button onClick={() => this.removeElement(id)} className="button create-button create-button"><span>Remove</span></button></td>
-                    </tr>
-                )
-            })
+            if (birthdays.length > 1) {
+                Object.keys(birthdays).map((key, i) => {
+                    birthdays[key].id = iterator;
+                    iterator++;
+                })
+                console.log('birthdays.length < 2')
+                // console.log(birthdays)
+                return birthdays.map((birthday, index) => {
+                    const { id, birthdayName, birthdayDate } = birthday //destructuring
+                    return (
+                        <tr key={id}>
+                            <td>{id}</td>
+                            <td>{birthdayName}</td>
+                            <td>{birthdayDate}</td>
+                            <td><button onClick={() => this.removeElement(id)} className="button create-button create-button"><span>Remove</span></button></td>
+                        </tr>
+                    )
+                })
+            } else {
+                console.log('else block')
+                // console.log(birthdays)
+                // console.log(birthdays.length)
+                return birthdays.map((birthday, index) => {
+                    const { id, birthdayName, birthdayDate } = birthday //destructuring
+                    return (
+                        <tr key={id}>
+                            <td>{id}</td>
+                            <td>{birthdayName}</td>
+                            <td>{birthdayDate}</td>
+                            <td><button onClick={() => this.removeElement(id)} className="button create-button create-button"><span>Remove</span></button></td>
+                        </tr>
+                    )
+                })
+            }
         } else {
             return (
                 <p>No birthdays</p>

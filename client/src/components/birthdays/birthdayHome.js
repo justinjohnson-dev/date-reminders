@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
 import axios from "axios";
-import { TextField, Button } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import './birthday.css';
 
 
@@ -40,12 +40,12 @@ class BirthdayHome extends Component {
                         birthdays: res.data.birthdays,
                     })
                 });
-
-            this.setState({
-                userName: userName,
-                userPhone: userPhone,
-            })
         }
+
+        this.setState({
+            userName: userName,
+            userPhone: userPhone,
+        })
     }
 
     onChange = e => {
@@ -159,7 +159,7 @@ class BirthdayHome extends Component {
                     <Link to={{ pathname: "/editBirthdays" }} style={{ textDecoration: 'none' }}>
                         <Button variant="contained" color="primary">
                             Edit Birthdays
-                                    </Button>
+                        </Button>
                     </Link>
                 </div>
             </div>
