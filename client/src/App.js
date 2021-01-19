@@ -5,6 +5,7 @@ import Header from './components/banner/banner';
 import Footer from './components/footer/footer';
 import BirthdayHome from './components/birthdays/birthdayHome';
 import EditBirthday from './components/birthdays/editBirthdays';
+import HowItWorks from './components/howItWorks';
 
 
 class App extends Component {
@@ -15,7 +16,8 @@ class App extends Component {
         <Route exact path="/" component={User} />
         <Route exact path="/birthday" component={BirthdayHome} />
         <Route exact path="/editBirthdays" component={EditBirthday} />
-        <Footer />
+        <Route exact path="/howitworks" component={HowItWorks} />
+        {/* <Footer /> */}
       </Router>
     );
   }

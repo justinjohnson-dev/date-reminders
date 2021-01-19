@@ -121,7 +121,7 @@ class BirthdayHome extends Component {
             })
         } else {
             return (
-                <p>No current birthdays!</p>
+                <p>No Current Birthdays!</p>
             )
         }
     }
@@ -140,11 +140,11 @@ class BirthdayHome extends Component {
             <div className="birthday-adds">
                 <div className="welcome-banner">
                     <h2 className="welcome-message">Welcome, <span>{this.state.userName}!</span></h2>
-                    <h5>Phone Number - <span>{this.state.userPhone}</span></h5>
-                    <h6><Link to="/"><button className="button create-button create-button"><span>Not you?</span></button></Link></h6>
+                    <h5 className="welcome-phone">Phone Number - <span>{this.state.userPhone}</span></h5>
+                    <h6><Link to="/"><button className="button create-button"><span>Not you?</span></button></Link></h6>
                 </div>
                 <div>
-                    <h3 id='title'>Birthday List</h3>
+                    <h3 id='title'>Birthday List!</h3>
                     <table id='birthdays'>
                         <tbody>
                             {this.state.birthdays != undefined && this.state.birthdays.length > 0 &&

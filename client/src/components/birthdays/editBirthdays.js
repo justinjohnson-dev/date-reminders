@@ -143,7 +143,7 @@ class EditBirthday extends Component {
             })
         } else {
             return (
-                <p>No birthdays</p>
+                <p>No birthdays Added</p>
             )
         }
     }

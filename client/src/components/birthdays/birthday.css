@@ -11,11 +11,15 @@
     width: 75%;
     margin: 0px auto;
     padding-top: 5%;
-    padding-bottom: 5%;
+    padding-bottom: 2%;
 }
 
 .welcome-message {
     padding-bottom: 2.5%;
+}
+
+.welcome-phone {
+    font-size: 15px;
 }
 
 .box {
@@ -65,18 +69,6 @@
 
 }
 
-.ReactModal__Content {
-    position: absolute;
-    width: 50%;
-    height: 50%;
-    margin: 0px auto;
-    margin-top: 10%;
-    overflow: auto;
-    background-color: #eee;
-    -webkit-transform: translate(-50,-50%);
-    transform: translate(-50,-50%);
-}
-
 #title {
     padding: 20px;
     text-align: center;
@@ -111,7 +103,7 @@
 .confirm {
     float: left;
     margin-top: 10px;
-    margin-bottom: 5%;    
+    margin-bottom: 10%;
 }
 
 .button {
@@ -151,4 +143,8 @@
 .button:hover span:after {
     opacity: 1;
     right: 0;
+}
+
+.create-button {
+    margin-top: 2%;
 }
