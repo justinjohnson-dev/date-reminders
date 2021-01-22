@@ -17,9 +17,10 @@ class HowItWorks extends Component {
             <div className="how-to-div">
                 <div className="inner-how-to-div">
                     <h3>
-                        App that allows us to never forget a birthday again!!
+                        Never forget a birthday again!!
                     </h3>
-                    <p>details...</p>
+                    <br />
+                    <p> This service will allow you to  </p>
 
                     <p>for more information or any issues you com across - feel free to reach out!</p>
                     <div className="footer"><a href="https://www.linkedin.com/in/justin-johnson-413a93169/"><i class="fab fa-linkedin"></i></a><a className="link-link" target="_blank" href="https://www.linkedin.com/in/justin-johnson-413a93169/">JJ_DEV</a></div>

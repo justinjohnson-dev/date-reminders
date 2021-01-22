@@ -126,6 +126,15 @@ class BirthdayHome extends Component {
         }
     }
 
+    formatPhoneNumber(phoneNumberString) {
+        var cleaned = ('' + phoneNumberString).replace(/\D/g, '')
+        var match = cleaned.match(/^(1|)?(\d{3})(\d{3})(\d{4})$/)
+        if (match) {
+            var intlCode = (match[1] ? '+1 ' : '')
+            return [intlCode, '(', match[2], ') ', match[3], '-', match[4]].join('')
+        }
+        return null
+    }
 
     renderTableHeader() {
         let header = Object.keys(this.state.birthdays[0])
@@ -140,7 +149,7 @@ class BirthdayHome extends Component {
             <div className="birthday-adds">
                 <div className="welcome-banner">
                     <h2 className="welcome-message">Welcome, <span>{this.state.userName}!</span></h2>
-                    <h5 className="welcome-phone">Phone Number - <span>{this.state.userPhone}</span></h5>
+                    <h5 className="welcome-phone">Phone Number - <span>{this.formatPhoneNumber(this.state.userPhone)}</span></h5>
                     <h6><Link to="/"><button className="button create-button"><span>Not you?</span></button></Link></h6>
                 </div>
                 <div>

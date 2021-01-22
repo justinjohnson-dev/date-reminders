@@ -1,43 +1,8 @@
-.footer-div {
+.page-footer {
+    background-color: #eee;
     position: absolute;
     bottom: 0;
-    margin-bottom: 3%;
     width: 100%;
-    overflow: hidden;
-}
-
-.footer {
-    width: 10%;
-    margin: 0px auto;
-    font-weight: bold;
-}
-
-@media only screen and (max-width: 550px) {
-    .footer {
-        width: 25%;
-    }
-  }
-
-  @media only screen and (max-width: 1024px) and (min-width: 768px)  {
-    .footer {
-        width: 13%;
-    }
-  }
-
-  @media only screen and (max-width: 1350px) and (min-width: 1024px) {
-    .footer {
-        width: 10%;
-    }
-  }
-
-.link-link {
-    text-decoration: none;
-    color: black;
-    font-weight:bold;
-}
-
-.link-link:hover{
-    color:#0072b1;
 }
 
 .fa-linkedin {
@@ -47,6 +12,20 @@
     transition: transform 0.5s ease 0s;
 }
 
-.fa-linkedin:hover {
+.fa-github {
+    color: black;
+    font-size: 30px;
+    margin-right: 5%;
+    transition: transform 0.5s ease 0s;
+}
+
+.fa-envelope {
+    color: black;
+    font-size: 30px;
+    margin-right: 5%;
+    transition: transform 0.5s ease 0s;
+}
+
+.fa-linkedin:hover, .fa-github:hover, .fa-envelope:hover {
     transform: rotate(180deg);
 }

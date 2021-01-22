@@ -17,7 +17,7 @@ class App extends Component {
         <Route exact path="/birthday" component={BirthdayHome} />
         <Route exact path="/editBirthdays" component={EditBirthday} />
         <Route exact path="/howitworks" component={HowItWorks} />
-        {/* <Footer /> */}
+        <Footer />
       </Router>
     );
   }
