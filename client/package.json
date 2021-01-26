@@ -4,19 +4,23 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.11.0",
+    "@material-ui/data-grid": "^4.0.0-alpha.17",
     "@material-ui/icons": "^4.9.1",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "axios": "^0.21.0",
     "classnames": "^2.2.6",
+    "material-ui": "^0.20.2",
     "mdbreact": "^5.0.1",
+    "namor": "^2.0.2",
     "react": "^16.13.1",
     "react-banner": "^1.0.3",
     "react-dom": "^16.13.1",
     "react-modal": "^3.12.1",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.1"
+    "react-scripts": "3.4.1",
+    "react-table": "^7.6.3"
   },
   "scripts": {
     "start": "react-scripts start",
