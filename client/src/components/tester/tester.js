@@ -53,8 +53,6 @@ function descendingComparator(a, b, orderBy) {
 }
 
 function getComparator(order, orderBy) {
-    console.log(order)
-    console.log(orderBy)
     return order === 'desc'
         ? (a, b) => descendingComparator(a, b, orderBy)
         : (a, b) => -descendingComparator(a, b, orderBy);
@@ -71,8 +69,8 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-    { id: 'name', numeric: false, disablePadding: true, label: 'Names' },
-    { id: 'birthdays', numeric: true, disablePadding: false, label: 'Birthdays' },
+    { id: 'birthdayName', numeric: false, disablePadding: true, label: 'Names' },
+    { id: 'birthdayDate', numeric: true, disablePadding: false, label: 'Birthdays' },
     { id: 'id', numeric: true, disablePadding: false, label: 'id' }
 ];
 
@@ -222,38 +220,57 @@ export default function EnhancedTable() {
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
-    let BIRTHS = [];
-    const [birthdays, setBirthdays] = React.useState([]);
 
-    // Similar to componentDidMount and componentDidUpdate:
-    useEffect(() => {
+    function createData(birthdayName, birthdayDate, id) {
+        return { birthdayName, birthdayDate, id };
+    }
+
+    function getData() {
+        let data = [];
+        let rows = [];
+
         // Update the document title using the browser API
-        console.log('hello matey')
         // first time viewing birthday home screen fetch data from DB
         let userPhone = '9876543214'
         axios.get(`/api/v1/birthdays/${userPhone}`)
             .then(function (res) {
-                console.log("res")
-                console.log(res.data.birthdays)
-                BIRTHS = res.data.birthdays;
-                console.log("BIRTHS")
-                console.log(BIRTHS)
-            });
-    });
+                data = res.data.birthdays;
 
-    function createData(name, birthdays, id) {
-        return { name, birthdays, id };
+                for (let i = 0; i < data.length; i++) {
+                    // console.log('data')
+                    // console.log(data[i])
+                    let birthdayName = data[i].birthdayName
+                    let birthdayDate = data[i].birthdayDate
+                    let id = data[i].id
+                    console.log(birthdayName)
+                    console.log(birthdayDate)
+                    console.log(id)
+
+                    rows.push(createData(birthdayName, birthdayDate, id))
+                }
+            });
+
+        // rows = createData('Megan', '11/28/1998', 1);
+        // rows = createData('Megan', '11/28/1998', 1);
+        // console.log('rows')
+        // console.log(rows)
+        // // console.log(rows[0][Object.values(rows)[0]])
+
+
+        return rows;
     }
 
-    const rows = [
-        createData('Megan', '11/28/1998', 1),
-        createData('Justin', '11/25/1998', 2),
-        createData('JJ', '11/21/1998', 3),
-        createData('mEG', '11/22/1998', 4),
-        createData('ASH', '11/23/1998', 5),
-        createData('ASDSDFASDF', '11/23/2008', 6),
-        createData('MOM', '11/24/1998', 7)
-    ];
+    let rows = [getData()];
+
+    // const rows = [
+    //     createData('Megan', '11/28/1998', 1),
+    //     createData('Justin', '11/25/1998', 2),
+    //     createData('JJ', '11/21/1998', 3),
+    //     createData('mEG', '11/22/1998', 4),
+    //     createData('ASH', '11/23/1998', 5),
+    //     createData('ASDSDFASDF', '11/23/2008', 6),
+    //     createData('MOM', '11/24/1998', 7)
+    // ];
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -307,9 +324,14 @@ export default function EnhancedTable() {
 
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
+    console.log("rows")
+    console.log("rows")
+    console.log("rows")
+    console.log(rows[0])
+    console.log(typeof (rows))
+    console.log(typeof (rows))
     return (
         <div style={{ margin: "0px auto", marginTop: "5%" }} className={classes.root}>
-            <p>{JSON.stringify(BIRTHS)}</p>
             <Paper className={classes.paper}>
                 <EnhancedTableToolbar numSelected={selected.length} />
                 <TableContainer>
@@ -332,17 +354,17 @@ export default function EnhancedTable() {
                             {stableSort(rows, getComparator(order, orderBy))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row, index) => {
-                                    const isItemSelected = isSelected(row.name);
+                                    const isItemSelected = isSelected(row.birthdayName);
                                     const labelId = `enhanced-table-checkbox-${index}`;
 
                                     return (
                                         <TableRow
                                             hover
-                                            onClick={(event) => handleClick(event, row.name)}
+                                            onClick={(event) => handleClick(event, row.birthdayName)}
                                             role="checkbox"
                                             aria-checked={isItemSelected}
                                             tabIndex={-1}
-                                            key={row.name}
+                                            key={row.birthdayName}
                                             selected={isItemSelected}
                                         >
                                             <TableCell padding="checkbox">
@@ -352,9 +374,9 @@ export default function EnhancedTable() {
                                                 />
                                             </TableCell>
                                             <TableCell component="th" id={labelId} scope="row" padding="none">
-                                                {row.name}
+                                                {row.birthdayName}
                                             </TableCell>
-                                            <TableCell align="right">{row.birthdays}</TableCell>
+                                            <TableCell align="right">{row.birthdayDate}</TableCell>
                                             <TableCell align="right">{row.id}</TableCell>
                                         </TableRow>
                                     );
