@@ -20,6 +20,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
+import { Link } from 'react-router-dom';
 import axios from "axios";
 
 
@@ -145,7 +146,7 @@ const EnhancedTableToolbar = (props) => {
         </Typography>
             ) : (
                     <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
-                        Nutrition
+                        Birthdays
         </Typography>
                 )}
 
@@ -203,10 +204,16 @@ export default function EnhancedTable() {
     const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [mongoData, setMongoData] = React.useState([]);
+    const [userName, setUserName] = React.useState("");
+    const [userPhone, setUserPhone] = React.useState("");
     const rows = mongoData;
 
     useEffect(() => {
-        let userPhone = '9876543214';
+        let userInformation = localStorage.getItem('user');
+        let userName = userInformation.substr(0, userInformation.indexOf(',')).trim();
+        let userPhone = userInformation.substr(userInformation.indexOf(','), userInformation.length).replace(',', '').trim();
+        setUserName(userName);
+        setUserPhone(userPhone);
         axios.get(`/api/v1/birthdays/${userPhone}`)
             .then(response => setMongoData(response.data.birthdays));
     }, []);
@@ -246,6 +253,16 @@ export default function EnhancedTable() {
         setSelected(newSelected);
     };
 
+    const formatPhoneNumber = (phoneNumberString) => {
+        var cleaned = ('' + phoneNumberString).replace(/\D/g, '')
+        var match = cleaned.match(/^(1|)?(\d{3})(\d{3})(\d{4})$/)
+        if (match) {
+            var intlCode = (match[1] ? '+1 ' : '')
+            return [intlCode, '(', match[2], ') ', match[3], '-', match[4]].join('')
+        }
+        return null
+    }
+
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
@@ -265,8 +282,15 @@ export default function EnhancedTable() {
 
 
     return (
-        <div style={{ width: "50%", margin: "0px auto", marginTop: "5%" }} className={classes.root}>
-            <Paper className={classes.paper}>
+        <div style={{ width: "50%", margin: "0px auto", marginTop: "2%" }} className={classes.root}>
+            <Paper style={{ backgroundColor: "#eee" }}>
+                <div className="welcome-banner">
+                    <h2 className="welcome-message">Welcome, <span>{userName}!</span></h2>
+                    <h5 className="welcome-phone">Phone Number - <span>{formatPhoneNumber(userPhone)}</span></h5>
+                    {/* <h6><Link to="/"><button className="button create-button"><span>Not you?</span></button></Link></h6> */}
+                </div>
+            </Paper>
+            <Paper style={{ marginTop: "5%" }} className={classes.paper}>
                 <EnhancedTableToolbar numSelected={selected.length} />
                 <TableContainer>
                     <Table
