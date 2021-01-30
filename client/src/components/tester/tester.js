@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import axios from "axios";
 import { lighten, makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -21,32 +20,15 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
+import axios from "axios";
 
 
-// function createData(name, birthdays, id) {
-//     return { name, birthdays, id};
-// }
-
-// const rows = [
-//     createData('Megan', '11/28/1998', 1),
-//     createData('Justin', '11/25/1998', 2),
-//     createData('JJ', '11/21/1998', 3),
-//     createData('mEG', '11/22/1998', 4),
-//     createData('ASH', '11/23/1998', 5),
-//     createData('ASDSDFASDF', '11/23/2008', 6),
-//     createData('MOM', '11/24/1998', 7)
-// ];
 
 function descendingComparator(a, b, orderBy) {
-    // let birthdayA = a[orderBy].substr(a[orderBy].length - 4, a[orderBy].length - 1);
-    // let birthdayB = b[orderBy].substr(b[orderBy].length - 4, b[orderBy].length - 1);
-
-    if (a < b) {
-        // console.log(birthdayA)
-        // console.log(birthdayB)
+    if (b[orderBy] < a[orderBy]) {
         return -1;
     }
-    if (b > a) {
+    if (b[orderBy] > a[orderBy]) {
         return 1;
     }
     return 0;
@@ -69,9 +51,9 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-    { id: 'birthdayName', numeric: false, disablePadding: true, label: 'Names' },
-    { id: 'birthdayDate', numeric: true, disablePadding: false, label: 'Birthdays' },
-    { id: 'id', numeric: true, disablePadding: false, label: 'id' }
+    { id: 'id', numeric: false, disablePadding: true, label: 'ID' },
+    { id: 'birthdayName', numeric: true, disablePadding: false, label: 'Name' },
+    { id: 'birthdayDate', numeric: true, disablePadding: false, label: 'Birthday' },
 ];
 
 function EnhancedTableHead(props) {
@@ -163,7 +145,7 @@ const EnhancedTableToolbar = (props) => {
         </Typography>
             ) : (
                     <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
-                        Birthdays
+                        Nutrition
         </Typography>
                 )}
 
@@ -215,62 +197,19 @@ const useStyles = makeStyles((theme) => ({
 export default function EnhancedTable() {
     const classes = useStyles();
     const [order, setOrder] = React.useState('asc');
-    const [orderBy, setOrderBy] = React.useState('id');
+    const [orderBy, setOrderBy] = React.useState('calories');
     const [selected, setSelected] = React.useState([]);
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [mongoData, setMongoData] = React.useState([]);
+    const rows = mongoData;
 
-    function createData(birthdayName, birthdayDate, id) {
-        return { birthdayName, birthdayDate, id };
-    }
-
-    function getData() {
-        let data = [];
-        let rows = [];
-
-        // Update the document title using the browser API
-        // first time viewing birthday home screen fetch data from DB
-        let userPhone = '9876543214'
+    useEffect(() => {
+        let userPhone = '9876543214';
         axios.get(`/api/v1/birthdays/${userPhone}`)
-            .then(function (res) {
-                data = res.data.birthdays;
-
-                for (let i = 0; i < data.length; i++) {
-                    // console.log('data')
-                    // console.log(data[i])
-                    let birthdayName = data[i].birthdayName
-                    let birthdayDate = data[i].birthdayDate
-                    let id = data[i].id
-                    console.log(birthdayName)
-                    console.log(birthdayDate)
-                    console.log(id)
-
-                    rows.push(createData(birthdayName, birthdayDate, id))
-                }
-            });
-
-        // rows = createData('Megan', '11/28/1998', 1);
-        // rows = createData('Megan', '11/28/1998', 1);
-        // console.log('rows')
-        // console.log(rows)
-        // // console.log(rows[0][Object.values(rows)[0]])
-
-
-        return rows;
-    }
-
-    let rows = [getData()];
-
-    // const rows = [
-    //     createData('Megan', '11/28/1998', 1),
-    //     createData('Justin', '11/25/1998', 2),
-    //     createData('JJ', '11/21/1998', 3),
-    //     createData('mEG', '11/22/1998', 4),
-    //     createData('ASH', '11/23/1998', 5),
-    //     createData('ASDSDFASDF', '11/23/2008', 6),
-    //     createData('MOM', '11/24/1998', 7)
-    // ];
+            .then(response => setMongoData(response.data.birthdays));
+    }, []);
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -324,14 +263,9 @@ export default function EnhancedTable() {
 
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
-    console.log("rows")
-    console.log("rows")
-    console.log("rows")
-    console.log(rows[0])
-    console.log(typeof (rows))
-    console.log(typeof (rows))
+
     return (
-        <div style={{ margin: "0px auto", marginTop: "5%" }} className={classes.root}>
+        <div style={{ width: "50%", margin: "0px auto", marginTop: "5%" }} className={classes.root}>
             <Paper className={classes.paper}>
                 <EnhancedTableToolbar numSelected={selected.length} />
                 <TableContainer>
@@ -354,17 +288,17 @@ export default function EnhancedTable() {
                             {stableSort(rows, getComparator(order, orderBy))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row, index) => {
-                                    const isItemSelected = isSelected(row.birthdayName);
+                                    const isItemSelected = isSelected(row.id);
                                     const labelId = `enhanced-table-checkbox-${index}`;
 
                                     return (
                                         <TableRow
                                             hover
-                                            onClick={(event) => handleClick(event, row.birthdayName)}
+                                            onClick={(event) => handleClick(event, row.id)}
                                             role="checkbox"
                                             aria-checked={isItemSelected}
                                             tabIndex={-1}
-                                            key={row.birthdayName}
+                                            key={row.id}
                                             selected={isItemSelected}
                                         >
                                             <TableCell padding="checkbox">
@@ -374,10 +308,10 @@ export default function EnhancedTable() {
                                                 />
                                             </TableCell>
                                             <TableCell component="th" id={labelId} scope="row" padding="none">
-                                                {row.birthdayName}
+                                                {row.id}
                                             </TableCell>
+                                            <TableCell align="right">{row.birthdayName}</TableCell>
                                             <TableCell align="right">{row.birthdayDate}</TableCell>
-                                            <TableCell align="right">{row.id}</TableCell>
                                         </TableRow>
                                     );
                                 })}
@@ -390,7 +324,7 @@ export default function EnhancedTable() {
                     </Table>
                 </TableContainer>
                 <TablePagination
-                    rowsPerPageOptions={[5, 10, 25]}
+                    rowsPerPageOptions={[5, 10, 15]}
                     component="div"
                     count={rows.length}
                     rowsPerPage={rowsPerPage}
@@ -400,7 +334,9 @@ export default function EnhancedTable() {
                 />
             </Paper>
             <FormControlLabel
-                control={<Switch checked={dense} onChange={handleChangeDense} />}
+                control={
+                    <Switch checked={dense} onChange={handleChangeDense} />
+                }
                 label="Dense padding"
             />
         </div>
