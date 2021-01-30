@@ -12,6 +12,9 @@ const userSchema = new Schema({
         type: Number,
         required: true
     },
+    age: {
+        type: Number,
+    },
     birthdays: {
         type: Array
     }

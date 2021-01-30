@@ -56,6 +56,7 @@ const headCells = [
     { id: 'id', numeric: false, disablePadding: true, label: 'ID' },
     { id: 'birthdayName', numeric: true, disablePadding: false, label: 'Name' },
     { id: 'birthdayDate', numeric: true, disablePadding: false, label: 'Birthday' },
+    { id: 'age', numeric: true, disablePadding: false, label: 'Age' },
 ];
 
 function EnhancedTableHead(props) {
@@ -142,11 +143,11 @@ const EnhancedTableToolbar = (props) => {
             })}
         >
             {numSelected > 0 ? (
-                <Typography className={classes.title} color="inherit" variant="subtitle1" component="div">
+                <Typography className={classes.title} color="inherit" letiant="subtitle1" component="div">
                     {numSelected} selected
         </Typography>
             ) : (
-                    <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
+                    <Typography className={classes.title} letiant="h6" id="tableTitle" component="div">
                         Birthdays
         </Typography>
                 )}
@@ -210,6 +211,7 @@ export default function EnhancedTable() {
     const [errors, setErrors] = React.useState({});
     const [birthdayName, setBirthdayName] = React.useState("");
     const [birthdayDate, setBirthdayDate] = React.useState("");
+    const [age, setAge] = React.useState(0);
     const rows = mongoData;
 
     useEffect(() => {
@@ -258,13 +260,65 @@ export default function EnhancedTable() {
     };
 
     const formatPhoneNumber = (phoneNumberString) => {
-        var cleaned = ('' + phoneNumberString).replace(/\D/g, '')
-        var match = cleaned.match(/^(1|)?(\d{3})(\d{3})(\d{4})$/)
+        let cleaned = ('' + phoneNumberString).replace(/\D/g, '')
+        let match = cleaned.match(/^(1|)?(\d{3})(\d{3})(\d{4})$/)
         if (match) {
-            var intlCode = (match[1] ? '+1 ' : '')
+            let intlCode = (match[1] ? '+1 ' : '')
             return [intlCode, '(', match[2], ') ', match[3], '-', match[4]].join('')
         }
         return null
+    }
+
+    const findAge = (birthdayDate) => {
+        // https://stackoverflow.com/questions/12251325/javascript-date-to-calculate-age-work-by-the-day-months-years
+        let today = new Date();
+        let DOB = new Date(birthdayDate);
+        let totalMonths = (today.getFullYear() - DOB.getFullYear()) * 12 + today.getMonth() - DOB.getMonth();
+        totalMonths += today.getDay() < DOB.getDay() ? -1 : 0;
+        let years = today.getFullYear() - DOB.getFullYear();
+        if (DOB.getMonth() > today.getMonth())
+            years = years - 1;
+        else if (DOB.getMonth() === today.getMonth())
+            if (DOB.getDate() > today.getDate())
+                years = years - 1;
+
+        let days;
+        let months;
+
+        if (DOB.getDate() > today.getDate()) {
+            months = (totalMonths % 12);
+            if (months == 0)
+                months = 11;
+            let x = today.getMonth();
+            switch (x) {
+                case 1:
+                case 3:
+                case 5:
+                case 7:
+                case 8:
+                case 10:
+                case 12: {
+                    let a = DOB.getDate() - today.getDate();
+                    days = 31 - a;
+                    break;
+                }
+                default: {
+                    let a = DOB.getDate() - today.getDate();
+                    days = 30 - a;
+                    break;
+                }
+            }
+
+        }
+        else {
+            days = today.getDate() - DOB.getDate();
+            if (DOB.getMonth() === today.getMonth())
+                months = (totalMonths % 12);
+            else
+                months = (totalMonths % 12) + 1;
+        }
+        let age = years + ' years ' + months + ' months ' + days + ' days';
+        return age;
     }
 
     const uploadToMongo = () => {
@@ -334,10 +388,12 @@ export default function EnhancedTable() {
                 // what is the last index ID?
                 lastBirthdayIndex = mongoData.length - 1;
                 lastBirthdayId = mongoData[lastBirthdayIndex].id;
+                let birthdayAge = findAge(birthdayDate);
                 let newBirthday = {
                     id: lastBirthdayId + 1,
                     birthdayName: birthdayName,
-                    birthdayDate: birthdayDate
+                    birthdayDate: birthdayDate,
+                    age: birthdayAge
                 }
 
                 mongoData.push(newBirthday);
@@ -346,10 +402,12 @@ export default function EnhancedTable() {
                 setBirthdayName("");
                 setBirthdayDate("");
             } else {
+                let birthdayAge = findAge(birthdayDate);
                 let newBirthday = [{
                     id: 1,
                     birthdayName: birthdayName,
-                    birthdayDate: birthdayDate
+                    birthdayDate: birthdayDate,
+                    age: birthdayAge
                 }]
                 console.log(newBirthday)
                 // reset state
@@ -367,43 +425,6 @@ export default function EnhancedTable() {
 
     return (
         <div style={{ width: "50%", margin: "0px auto", marginTop: "2%" }} className={classes.root}>
-            <Paper>
-                <div className="description">Add new Birthday!</div>
-                <div className="birthday-edit">
-                    <TextField
-                        style={{ padding: "5px" }}
-                        name="birthdayName"
-                        placeholder="Name"
-                        value={birthdayName}
-                        onChange={e => setBirthdayName(e.target.value)}
-                        type="birthdayName"
-                        id="birthdayName"
-                        variant="outlined"
-                        size="small"
-                        InputProps={{ disableUnderline: true }}
-                    />
-                    {errors.birthdayNameLength &&
-                        <p style={{ color: "red" }}>{errors.birthdayNameLength}</p>
-                    }
-                    <TextField
-                        style={{ padding: "5px" }}
-                        type="date"
-                        name="birthdayDate"
-                        placeholder="Name"
-                        value={birthdayDate}
-                        onChange={e => setBirthdayDate(e.target.value)}
-                        id="birthdayDate"
-                        variant="outlined"
-                        size="small"
-                    />
-                    {errors.birthdayDateLength &&
-                        <p style={{ color: "red" }}>{errors.birthdayDateLength}</p>
-                    }
-                    <div className="btn-box">
-                        <Button onClick={handleAddClick}>Add</Button>
-                    </div>
-                </div>
-            </Paper>
             <Paper style={{ backgroundColor: "#eee" }}>
                 <div className="welcome-banner">
                     <h2 className="welcome-message">Welcome, <span>{userName}!</span></h2>
@@ -412,6 +433,43 @@ export default function EnhancedTable() {
                 </div>
             </Paper>
             <Paper style={{ marginTop: "5%" }} className={classes.paper}>
+                {/* <div className="description">Add New Birthday!</div> */}
+                <div style={{ padding: "5px 0px 0px 12px" }}>
+                    <div className="birthday-edit">
+                        <TextField
+                            style={{ padding: "5px" }}
+                            name="birthdayName"
+                            placeholder="Name"
+                            value={birthdayName}
+                            onChange={e => setBirthdayName(e.target.value)}
+                            type="birthdayName"
+                            id="birthdayName"
+                            variant="outlined"
+                            size="small"
+                            InputProps={{ disableUnderline: true }}
+                        />
+                        {errors.birthdayNameLength &&
+                            <p style={{ color: "red" }}>{errors.birthdayNameLength}</p>
+                        }
+                        <TextField
+                            style={{ padding: "5px" }}
+                            type="date"
+                            name="birthdayDate"
+                            placeholder="Date"
+                            value={birthdayDate}
+                            onChange={e => setBirthdayDate(e.target.value)}
+                            id="birthdayDate"
+                            variant="outlined"
+                            size="small"
+                        />
+                        {errors.birthdayDateLength &&
+                            <p style={{ color: "red" }}>{errors.birthdayDateLength}</p>
+                        }
+                        <div className="btn-box">
+                            <Button onClick={handleAddClick}>Add</Button>
+                        </div>
+                    </div>
+                </div>
                 <EnhancedTableToolbar numSelected={selected.length} />
                 <TableContainer>
                     <Table
@@ -457,6 +515,7 @@ export default function EnhancedTable() {
                                             </TableCell>
                                             <TableCell align="right">{row.birthdayName}</TableCell>
                                             <TableCell align="right">{row.birthdayDate}</TableCell>
+                                            <TableCell align="right">{row.age}</TableCell>
                                         </TableRow>
                                     );
                                 })}

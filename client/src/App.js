@@ -20,7 +20,7 @@ class App extends Component {
         <Route exact path="/editBirthdays" component={EditBirthday} />
         <Route exact path="/howitworks" component={HowItWorks} />
         <Route exact path="/Tester" component={DataTable} />
-        <Footer />
+        {/* <Footer /> */}
       </Router>
     );
   }
