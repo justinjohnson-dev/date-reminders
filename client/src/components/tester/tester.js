@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { lighten, makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
+import { TextField, Button } from '@material-ui/core';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
@@ -206,6 +207,9 @@ export default function EnhancedTable() {
     const [mongoData, setMongoData] = React.useState([]);
     const [userName, setUserName] = React.useState("");
     const [userPhone, setUserPhone] = React.useState("");
+    const [errors, setErrors] = React.useState({});
+    const [birthdayName, setBirthdayName] = React.useState("");
+    const [birthdayDate, setBirthdayDate] = React.useState("");
     const rows = mongoData;
 
     useEffect(() => {
@@ -263,6 +267,24 @@ export default function EnhancedTable() {
         return null
     }
 
+    const uploadToMongo = () => {
+        let userInfo = {
+            name: userName,
+            phone_number: userPhone,
+            birthdays: mongoData
+        };
+
+        if (mongoData != undefined) {
+            axios.post(`/api/v1/userBirthdays`, userInfo)
+                .then(res => {
+                    console.log("userInfo")
+                    console.log(userInfo)
+                })
+        } else {
+            console.log('Sending no data - no birthdays were added')
+        }
+    }
+
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
@@ -280,9 +302,108 @@ export default function EnhancedTable() {
 
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
+    const formValidation = () => {
+        let isValid = true;
+        const errors = {};
+
+        if (birthdayName.trim().length < 1) {
+            errors.birthdayNameLength = "Name is required!"
+            isValid = false;
+        }
+        if (birthdayDate.trim().length < 1) {
+            errors.birthdayDateLength = "Must add a date!"
+            isValid = false;
+        }
+
+        setErrors(errors);
+        return isValid;
+    }
+
+    const handleAddClick = () => {
+        let id = 1;
+        let lastBirthdayIndex = null;
+        let lastBirthdayId = null;
+        // validate birthday
+        const isValid = formValidation();
+
+        if (isValid) {
+
+            // find last id increment new by one
+            // TODO: when object is remove fix the ID's to be in right order
+            if (mongoData != undefined && mongoData.length > 0) {
+                // what is the last index ID?
+                lastBirthdayIndex = mongoData.length - 1;
+                lastBirthdayId = mongoData[lastBirthdayIndex].id;
+                let newBirthday = {
+                    id: lastBirthdayId + 1,
+                    birthdayName: birthdayName,
+                    birthdayDate: birthdayDate
+                }
+
+                mongoData.push(newBirthday);
+
+                // reset state
+                setBirthdayName("");
+                setBirthdayDate("");
+            } else {
+                let newBirthday = [{
+                    id: 1,
+                    birthdayName: birthdayName,
+                    birthdayDate: birthdayDate
+                }]
+                console.log(newBirthday)
+                // reset state
+                setBirthdayName("");
+                setBirthdayDate("");
+                setMongoData(newBirthday);
+            }
+
+        } else {
+            console.log('Invalid Form');
+        }
+
+        uploadToMongo();
+    }
 
     return (
         <div style={{ width: "50%", margin: "0px auto", marginTop: "2%" }} className={classes.root}>
+            <Paper>
+                <div className="description">Add new Birthday!</div>
+                <div className="birthday-edit">
+                    <TextField
+                        style={{ padding: "5px" }}
+                        name="birthdayName"
+                        placeholder="Name"
+                        value={birthdayName}
+                        onChange={e => setBirthdayName(e.target.value)}
+                        type="birthdayName"
+                        id="birthdayName"
+                        variant="outlined"
+                        size="small"
+                        InputProps={{ disableUnderline: true }}
+                    />
+                    {errors.birthdayNameLength &&
+                        <p style={{ color: "red" }}>{errors.birthdayNameLength}</p>
+                    }
+                    <TextField
+                        style={{ padding: "5px" }}
+                        type="date"
+                        name="birthdayDate"
+                        placeholder="Name"
+                        value={birthdayDate}
+                        onChange={e => setBirthdayDate(e.target.value)}
+                        id="birthdayDate"
+                        variant="outlined"
+                        size="small"
+                    />
+                    {errors.birthdayDateLength &&
+                        <p style={{ color: "red" }}>{errors.birthdayDateLength}</p>
+                    }
+                    <div className="btn-box">
+                        <Button onClick={handleAddClick}>Add</Button>
+                    </div>
+                </div>
+            </Paper>
             <Paper style={{ backgroundColor: "#eee" }}>
                 <div className="welcome-banner">
                     <h2 className="welcome-message">Welcome, <span>{userName}!</span></h2>
