@@ -135,6 +135,24 @@ const useToolbarStyles = makeStyles((theme) => ({
 const EnhancedTableToolbar = (props) => {
     const classes = useToolbarStyles();
     const { numSelected } = props;
+    const [userName, setUserName] = React.useState("");
+    const [userPhone, setUserPhone] = React.useState("");
+    const [mongoData, setMongoData] = React.useState([]);
+
+    useEffect(() => {
+        let userInformation = localStorage.getItem('user');
+        let userName = userInformation.substr(0, userInformation.indexOf(',')).trim();
+        let userPhone = userInformation.substr(userInformation.indexOf(','), userInformation.length).replace(',', '').trim();
+        setUserName(userName);
+        setUserPhone(userPhone);
+        axios.get(`/api/v1/birthdays/${userPhone}`)
+            .then(response => setMongoData(response.data.birthdays));
+    }, []);
+
+    const deleteBirthday = () => {
+        console.log('delted');
+        console.log(numSelected)
+    }
 
     return (
         <Toolbar
@@ -155,7 +173,7 @@ const EnhancedTableToolbar = (props) => {
             {numSelected > 0 ? (
                 <Tooltip title="Delete">
                     <IconButton aria-label="delete">
-                        <DeleteIcon />
+                        <DeleteIcon onClick={deleteBirthday} />
                     </IconButton>
                 </Tooltip>
             ) : (
@@ -381,7 +399,6 @@ export default function EnhancedTable() {
         const isValid = formValidation();
 
         if (isValid) {
-
             // find last id increment new by one
             // TODO: when object is remove fix the ID's to be in right order
             if (mongoData != undefined && mongoData.length > 0) {
