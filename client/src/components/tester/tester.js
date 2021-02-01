@@ -57,6 +57,7 @@ const headCells = [
     { id: 'birthdayName', numeric: true, disablePadding: false, label: 'Name' },
     { id: 'birthdayDate', numeric: true, disablePadding: false, label: 'Birthday' },
     { id: 'age', numeric: true, disablePadding: false, label: 'Age' },
+    { id: 'delete', numeric: true, disablePadding: false, label: '' },
 ];
 
 function EnhancedTableHead(props) {
@@ -69,12 +70,16 @@ function EnhancedTableHead(props) {
         <TableHead>
             <TableRow>
                 <TableCell padding="checkbox">
-                    <Checkbox
+
+
+                    {/* <Checkbox
                         indeterminate={numSelected > 0 && numSelected < rowCount}
                         checked={rowCount > 0 && numSelected === rowCount}
                         onChange={onSelectAllClick}
                         inputProps={{ 'aria-label': 'select all desserts' }}
-                    />
+                    /> */}
+
+
                 </TableCell>
                 {headCells.map((headCell) => (
                     <TableCell
@@ -135,24 +140,6 @@ const useToolbarStyles = makeStyles((theme) => ({
 const EnhancedTableToolbar = (props) => {
     const classes = useToolbarStyles();
     const { numSelected } = props;
-    const [userName, setUserName] = React.useState("");
-    const [userPhone, setUserPhone] = React.useState("");
-    const [mongoData, setMongoData] = React.useState([]);
-
-    useEffect(() => {
-        let userInformation = localStorage.getItem('user');
-        let userName = userInformation.substr(0, userInformation.indexOf(',')).trim();
-        let userPhone = userInformation.substr(userInformation.indexOf(','), userInformation.length).replace(',', '').trim();
-        setUserName(userName);
-        setUserPhone(userPhone);
-        axios.get(`/api/v1/birthdays/${userPhone}`)
-            .then(response => setMongoData(response.data.birthdays));
-    }, []);
-
-    const deleteBirthday = () => {
-        console.log('delted');
-        console.log(numSelected)
-    }
 
     return (
         <Toolbar
@@ -173,7 +160,7 @@ const EnhancedTableToolbar = (props) => {
             {numSelected > 0 ? (
                 <Tooltip title="Delete">
                     <IconButton aria-label="delete">
-                        <DeleteIcon onClick={deleteBirthday} />
+                        <DeleteIcon />
                     </IconButton>
                 </Tooltip>
             ) : (
@@ -256,6 +243,17 @@ export default function EnhancedTable() {
         }
         setSelected([]);
     };
+
+    const deleteBirthday = (selectedLength) => {
+        console.log('hello')
+        console.log(selectedLength)
+        // Object.keys(mongoData).map((key, i) => {
+        //     if (mongoData[key].id === id) {
+        //         const newList = mongoData.filter((item) => item.id != id);
+        //         setMongoData(newList);
+        //     }
+        // })
+    }
 
     const handleClick = (event, name) => {
         const selectedIndex = selected.indexOf(name);
@@ -345,6 +343,9 @@ export default function EnhancedTable() {
             phone_number: userPhone,
             birthdays: mongoData
         };
+
+        console.log('sending data')
+        console.log(mongoData)
 
         if (mongoData != undefined) {
             axios.post(`/api/v1/userBirthdays`, userInfo)
@@ -440,6 +441,26 @@ export default function EnhancedTable() {
         uploadToMongo();
     }
 
+    const handleRemove = i => {
+        console.log("i")
+        console.log(i)
+
+        setMongoData(mongoData.filter((row, j) => j !== i))
+
+        // let iterator = 1;
+
+        // // fix ID's
+        // Object.keys(mongoData).map((key, i) => {
+        //     mongoData[key].id = iterator;
+        //     iterator++;
+        // })
+
+        // refresh the data in mongo
+        uploadToMongo();
+        // window.location.reload(false);
+
+    };
+
     return (
         <div style={{ width: "50%", margin: "0px auto", marginTop: "2%" }} className={classes.root}>
             <Paper style={{ backgroundColor: "#eee" }}>
@@ -487,7 +508,7 @@ export default function EnhancedTable() {
                         </div>
                     </div>
                 </div>
-                <EnhancedTableToolbar numSelected={selected.length} />
+                {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
                 <TableContainer>
                     <Table
                         className={classes.table}
@@ -497,6 +518,7 @@ export default function EnhancedTable() {
                     >
                         <EnhancedTableHead
                             classes={classes}
+                            handleRemove={handleRemove}
                             numSelected={selected.length}
                             order={order}
                             orderBy={orderBy}
@@ -522,10 +544,12 @@ export default function EnhancedTable() {
                                             selected={isItemSelected}
                                         >
                                             <TableCell padding="checkbox">
-                                                <Checkbox
+                                                {/* <DeleteIcon onClick={() => handleRemove(row.id)} /> */}
+
+                                                {/* <Checkbox
                                                     checked={isItemSelected}
                                                     inputProps={{ 'aria-labelledby': labelId }}
-                                                />
+                                                /> */}
                                             </TableCell>
                                             <TableCell component="th" id={labelId} scope="row" padding="none">
                                                 {row.id}
@@ -533,6 +557,9 @@ export default function EnhancedTable() {
                                             <TableCell align="right">{row.birthdayName}</TableCell>
                                             <TableCell align="right">{row.birthdayDate}</TableCell>
                                             <TableCell align="right">{row.age}</TableCell>
+                                            <TableCell align="right">
+                                                <DeleteIcon onClick={() => handleRemove(row.id)} />
+                                            </TableCell>
                                         </TableRow>
                                     );
                                 })}
