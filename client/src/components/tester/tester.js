@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { lighten, makeStyles } from '@material-ui/core/styles';
@@ -57,7 +57,6 @@ const headCells = [
     { id: 'birthdayName', numeric: true, disablePadding: false, label: 'Name' },
     { id: 'birthdayDate', numeric: true, disablePadding: false, label: 'Birthday' },
     { id: 'age', numeric: true, disablePadding: false, label: 'Age' },
-    { id: 'delete', numeric: true, disablePadding: false, label: '' },
 ];
 
 function EnhancedTableHead(props) {
@@ -70,16 +69,12 @@ function EnhancedTableHead(props) {
         <TableHead>
             <TableRow>
                 <TableCell padding="checkbox">
-
-
-                    {/* <Checkbox
+                    <Checkbox
                         indeterminate={numSelected > 0 && numSelected < rowCount}
                         checked={rowCount > 0 && numSelected === rowCount}
                         onChange={onSelectAllClick}
                         inputProps={{ 'aria-label': 'select all desserts' }}
-                    /> */}
-
-
+                    />
                 </TableCell>
                 {headCells.map((headCell) => (
                     <TableCell
@@ -116,7 +111,6 @@ EnhancedTableHead.propTypes = {
     orderBy: PropTypes.string.isRequired,
     rowCount: PropTypes.number.isRequired,
 };
-
 const useToolbarStyles = makeStyles((theme) => ({
     root: {
         paddingLeft: theme.spacing(2),
@@ -139,7 +133,42 @@ const useToolbarStyles = makeStyles((theme) => ({
 
 const EnhancedTableToolbar = (props) => {
     const classes = useToolbarStyles();
-    const { numSelected } = props;
+    const { numSelected, isSelected, userName, userPhone, mongoData } = props;
+
+    const uploadToMongo = () => {
+        let userInfo = {
+            name: userName,
+            phone_number: userPhone,
+            birthdays: mongoData
+        };
+
+        if (mongoData != undefined) {
+            axios.post(`/api/v1/userBirthdays`, userInfo)
+                .then(res => { })
+        } else {
+            console.log('No data to be deleted')
+        }
+    }
+
+    const removeByAttr = function (arr, attr, value) {
+        // https://stackoverflow.com/questions/3396088/how-do-i-remove-an-object-from-an-array-with-javascript
+        let i = arr.length;
+        while (i--) {
+            if (arr[i] && arr[i].hasOwnProperty(attr) && (arguments.length > 2 && arr[i][attr] === value)) {
+                arr.splice(i, 1);
+            }
+        }
+        return arr;
+    }
+
+    const deleteBirthday = () => {
+        for (let i = 0; i < isSelected.length; i++) {
+            removeByAttr(mongoData, 'id', isSelected[i])
+        }
+
+        uploadToMongo();
+        window.location.reload(false);
+    }
 
     return (
         <Toolbar
@@ -160,7 +189,7 @@ const EnhancedTableToolbar = (props) => {
             {numSelected > 0 ? (
                 <Tooltip title="Delete">
                     <IconButton aria-label="delete">
-                        <DeleteIcon />
+                        <DeleteIcon onClick={deleteBirthday} />
                     </IconButton>
                 </Tooltip>
             ) : (
@@ -243,17 +272,6 @@ export default function EnhancedTable() {
         }
         setSelected([]);
     };
-
-    const deleteBirthday = (selectedLength) => {
-        console.log('hello')
-        console.log(selectedLength)
-        // Object.keys(mongoData).map((key, i) => {
-        //     if (mongoData[key].id === id) {
-        //         const newList = mongoData.filter((item) => item.id != id);
-        //         setMongoData(newList);
-        //     }
-        // })
-    }
 
     const handleClick = (event, name) => {
         const selectedIndex = selected.indexOf(name);
@@ -441,26 +459,6 @@ export default function EnhancedTable() {
         uploadToMongo();
     }
 
-    const handleRemove = i => {
-        console.log("i")
-        console.log(i)
-
-        setMongoData(mongoData.filter((row, j) => j !== i))
-
-        // let iterator = 1;
-
-        // // fix ID's
-        // Object.keys(mongoData).map((key, i) => {
-        //     mongoData[key].id = iterator;
-        //     iterator++;
-        // })
-
-        // refresh the data in mongo
-        uploadToMongo();
-        // window.location.reload(false);
-
-    };
-
     return (
         <div style={{ width: "50%", margin: "0px auto", marginTop: "2%" }} className={classes.root}>
             <Paper style={{ backgroundColor: "#eee" }}>
@@ -471,7 +469,6 @@ export default function EnhancedTable() {
                 </div>
             </Paper>
             <Paper style={{ marginTop: "5%" }} className={classes.paper}>
-                {/* <div className="description">Add New Birthday!</div> */}
                 <div style={{ padding: "5px 0px 0px 12px" }}>
                     <div className="birthday-edit">
                         <TextField
@@ -508,7 +505,7 @@ export default function EnhancedTable() {
                         </div>
                     </div>
                 </div>
-                {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
+                <EnhancedTableToolbar numSelected={selected.length} isSelected={selected} userName={userName} userPhone={userPhone} mongoData={mongoData} />
                 <TableContainer>
                     <Table
                         className={classes.table}
@@ -518,7 +515,6 @@ export default function EnhancedTable() {
                     >
                         <EnhancedTableHead
                             classes={classes}
-                            handleRemove={handleRemove}
                             numSelected={selected.length}
                             order={order}
                             orderBy={orderBy}
@@ -544,12 +540,10 @@ export default function EnhancedTable() {
                                             selected={isItemSelected}
                                         >
                                             <TableCell padding="checkbox">
-                                                {/* <DeleteIcon onClick={() => handleRemove(row.id)} /> */}
-
-                                                {/* <Checkbox
+                                                <Checkbox
                                                     checked={isItemSelected}
                                                     inputProps={{ 'aria-labelledby': labelId }}
-                                                /> */}
+                                                />
                                             </TableCell>
                                             <TableCell component="th" id={labelId} scope="row" padding="none">
                                                 {row.id}
@@ -557,9 +551,6 @@ export default function EnhancedTable() {
                                             <TableCell align="right">{row.birthdayName}</TableCell>
                                             <TableCell align="right">{row.birthdayDate}</TableCell>
                                             <TableCell align="right">{row.age}</TableCell>
-                                            <TableCell align="right">
-                                                <DeleteIcon onClick={() => handleRemove(row.id)} />
-                                            </TableCell>
                                         </TableRow>
                                     );
                                 })}
