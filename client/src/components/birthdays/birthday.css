@@ -148,3 +148,66 @@
 .create-button {
     margin-top: 2%;
 }
+
+.main-div { 
+    width: 50%; 
+    margin: 0px auto;
+    margin-top: 2%;
+}
+
+.error-style {
+    color: red;
+    padding: 1%;
+}
+
+@media only screen and (max-width: 600px) {
+    .main-div { 
+        width: 90%; 
+        margin: 0px auto;
+        margin-top: 4.5%;
+    }
+    .welcome-message {
+        font-size: 22px;
+    }
+    .birthday-edit {
+        display: flex;
+        flex-direction: column;
+        width: 80%;
+        margin-top: 20px;
+        text-align: left;
+    }
+    .btn-box {
+        margin-top: 5px;
+        text-align: right;
+        margin-right: 5px;
+        margin-bottom: 5%;
+    }
+    .welcome-phone {
+        padding-bottom: 2%;
+    }
+    .error-style {
+        color: red;
+        margin: 0px auto;
+        padding: 2%;
+        margin-bottom: 2%;
+    }
+  }
+
+  @media only screen and (max-width: 1024px) and (min-width: 768px) {
+    .main-div { 
+        width: 90%; 
+        margin: 0px auto;
+        margin-top: 4.5%;
+    }
+    .welcome-message {
+        font-size: 22px;
+    }
+  }
+
+  @media only screen and (max-width: 1350px) and (min-width: 1024px) {
+    .main-div { 
+        width: 90%; 
+        margin: 0px auto;
+        margin-top: 4.5%;
+    }
+  }
