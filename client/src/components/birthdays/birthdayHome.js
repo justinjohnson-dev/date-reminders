@@ -112,6 +112,7 @@ EnhancedTableHead.propTypes = {
     orderBy: PropTypes.string.isRequired,
     rowCount: PropTypes.number.isRequired,
 };
+
 const useToolbarStyles = makeStyles((theme) => ({
     root: {
         paddingLeft: theme.spacing(2),
@@ -178,13 +179,13 @@ const EnhancedTableToolbar = (props) => {
             })}
         >
             {numSelected > 0 ? (
-                <Typography className={classes.title} color="inherit" letiant="subtitle1" component="div">
+                <Typography className={classes.title} color="inherit" variant="subtitle1" component="div">
                     {numSelected} selected
-        </Typography>
+                </Typography>
             ) : (
-                    <Typography className={classes.title} letiant="h6" id="tableTitle" component="div">
+                    <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
                         Birthdays
-        </Typography>
+                </Typography>
                 )}
 
             {numSelected > 0 ? (
@@ -258,6 +259,14 @@ export default function BirthdayHome() {
         axios.get(`/api/v1/birthdays/${userPhone}`)
             .then(response => setMongoData(response.data.birthdays));
     }, []);
+
+    const reIndexData = () => {
+        let iterator = 1;
+        Object.keys(mongoData).map((key, i) => {
+            mongoData[key].id = iterator;
+            iterator++;
+        })
+    }
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -420,7 +429,6 @@ export default function BirthdayHome() {
 
         if (isValid) {
             // find last id increment new by one
-            // TODO: when object is remove fix the ID's to be in right order
             if (mongoData != undefined && mongoData.length > 0) {
                 // what is the last index ID?
                 lastBirthdayIndex = mongoData.length - 1;
@@ -440,17 +448,15 @@ export default function BirthdayHome() {
                 setBirthdayDate("");
             } else {
                 let birthdayAge = findAge(birthdayDate);
-                let newBirthday = [{
+                let newBirthday = {
                     id: 1,
                     birthdayName: birthdayName,
                     birthdayDate: birthdayDate,
                     age: birthdayAge
-                }]
-                console.log(newBirthday)
-                // reset state
+                }
+                mongoData.push(newBirthday);
                 setBirthdayName("");
                 setBirthdayDate("");
-                setMongoData(newBirthday);
             }
 
         } else {
@@ -531,6 +537,7 @@ export default function BirthdayHome() {
                             {stableSort(rows, getComparator(order, orderBy))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row, index) => {
+                                    reIndexData();
                                     const isItemSelected = isSelected(row.id);
                                     const labelId = `enhanced-table-checkbox-${index}`;
 
