@@ -18,7 +18,7 @@ const useStyles = makeStyles({
         },
         "@media (min-width: 600px) and (max-width: 800px)": {
             width: '95%'
-        }
+        },
     },
     uploadButtonPushed: {
         backgroundColor: 'green'
@@ -26,12 +26,10 @@ const useStyles = makeStyles({
     uploadButtonDiv: {
         float: 'right',
         marginTop: '1%',
+        marginBottom: '10%',
         "@media (max-width: 600px)": {
-            marginBottom: '40%'
+            marginTop: '3%'
         },
-        "@media (min-width: 600px) and (max-width: 800px)": {
-            marginBottom: '40%'
-        }
     },
     title: {
         display: 'flex',
