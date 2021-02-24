@@ -7,14 +7,14 @@
 @media only screen and (max-width: 600px) {
     .user-form {
         width: 75%;
-        margin-top: 40%;
+        margin-top: 35%;
     }
   }
 
   @media only screen and (max-width: 1024px) and (min-width: 768px) {
     .user-form {
         width: 50%;
-        margin-top: 40%;
+        margin-top: 35%;
     }
   }
 
