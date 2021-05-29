@@ -5,6 +5,7 @@ const formidable = require('formidable');
 // const validateUserInput = require("../../validation/user")
 // Load User model
 const User = require("../../models/user");
+const Admin = require("../../models/admin");
 
 
 router.post("/userBirthdays", (req, res) => {
@@ -44,6 +45,53 @@ router.post("/userBirthdays", (req, res) => {
         }
     });
 });
+
+
+router.post("/admin", (req, res) => {
+    let userInfoObject = new Admin(req.body);
+    // let phone_number = userInfoObject.phone_number;
+    console.log(userInfoObject);
+
+    userInfoObject.save()
+        .then(item => {
+            res.send("item saved to database");
+        })
+        .catch(err => {
+            res.status(400).send("unable to save to database");
+        });
+    // find and save updated post
+    // User.findOne({ phone_number: phone_number }, function (err, foundOject) {
+    //     if (err) {
+    //         console.log(err)
+    //         res.status(500).send()
+    //     } else {
+    //         if (!foundOject) {
+    //             // insert new
+    //             userInfoObject.save((err, success) => {
+    //                 if (err) {
+    //                     return res.status(400).json({
+    //                         error: errorHandler(err)
+    //                     });
+    //                 }
+    //                 res.json(success);
+    //             });
+    //         } else {
+    //             foundOject.birthdays = userInfoObject.birthdays;
+
+    //             foundOject.save(function (err, userInfoObject) {
+    //                 if (err) {
+    //                     console.log(err);
+    //                     res.status(500).send();
+    //                 } else {
+    //                     res.send(userInfoObject);
+    //                 }
+    //             })
+    //         }
+    //     }
+    // });
+});
+
+
 
 
 router.get("/birthdays/:id", (req, res) => {

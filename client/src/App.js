@@ -6,6 +6,7 @@ import Footer from './components/footer/footer';
 import Editable from './components/birthdays/birthday';
 import HowItWorks from './components/howItWorks';
 import './app.css';
+import Admin from './components/birthdays/adminPage';
 
 
 class App extends Component {
@@ -19,6 +20,7 @@ class App extends Component {
               <Route exact path="/" component={User} />
               <Route exact path="/birthday" component={Editable} />
               <Route exact path="/howitworks" component={HowItWorks} />
+              <Route exact path="/admin" component={Admin} />
             </div>
           </Router>
         </div>
