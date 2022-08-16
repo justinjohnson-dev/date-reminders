@@ -11,17 +11,8 @@ import ListItemText from '@mui/material/ListItemText';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { styled } from '@mui/material/styles';
-import Button, { ButtonProps } from '@mui/material/Button';
-import { teal } from '@mui/material/colors';
-
-const ColorButton = styled(Button)<ButtonProps>(({ theme }) => ({
-  color: theme.palette.getContrastText(teal[500]),
-  backgroundColor: teal[500],
-  '&:hover': {
-    backgroundColor: teal[700],
-  },
-}));
+import TealButton from '../button/index';
+import Button from '@mui/material/Button';
 
 interface Props {
   window?: () => Window;
@@ -38,6 +29,10 @@ export default function ApplicationBar(props: Props) {
     setMobileOpen(!mobileOpen);
   };
 
+  const handleSignOut = () => {
+    localStorage.clear();
+  };
+
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
       <Typography variant='h6' sx={{ my: 2 }}>
@@ -52,7 +47,7 @@ export default function ApplicationBar(props: Props) {
             </ListItemButton>
           </ListItem>
         ))}
-        <ColorButton variant='contained'>Sign Out</ColorButton>
+        <TealButton label='Sign Out' onClick={handleSignOut} />
       </List>
     </Box>
   );
@@ -62,7 +57,7 @@ export default function ApplicationBar(props: Props) {
 
   return (
     <Box sx={{ display: 'flex', height: '55px' }}>
-      <AppBar component='nav'>
+      <AppBar component='nav' style={{ backgroundColor: 'black' }}>
         <Toolbar>
           <IconButton
             color='inherit'
@@ -78,7 +73,7 @@ export default function ApplicationBar(props: Props) {
             component='div'
             sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
           >
-            The Birthday Reminder
+            The Date Reminder
           </Typography>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
             {navItems.map((item) => (
@@ -86,7 +81,7 @@ export default function ApplicationBar(props: Props) {
                 {item}
               </Button>
             ))}
-            <ColorButton variant='contained'>Sign Out</ColorButton>
+            <TealButton label='Sign Out' onClick={handleSignOut} />
           </Box>
         </Toolbar>
       </AppBar>

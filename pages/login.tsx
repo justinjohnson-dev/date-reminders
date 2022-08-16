@@ -1,22 +1,19 @@
-import React, { FC, useState } from 'react';
+import React, { useState } from 'react';
+import type { NextPage } from 'next';
 import Layout from '../components/layout';
 import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import TealButton from '../components/button';
 
-interface LoginProps {}
-
-const Login: FC<LoginProps> = ({}) => {
+const Login: NextPage = () => {
   const [username, setUsername] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const router = useRouter();
 
-  const handleLoginIn = (event: React.FormEvent<HTMLButtonElement>) => {
-    event.preventDefault();
+  const handleLogin = () => {
     localStorage.setItem('user', username);
     localStorage.setItem('phoneNumber', phoneNumber);
-    router.push('/home');
+    router.push('/');
   };
 
   return (
@@ -27,7 +24,7 @@ const Login: FC<LoginProps> = ({}) => {
             display: 'flex',
             flexDirection: 'column',
             margin: '0 auto',
-            marginTop: '20%',
+            marginTop: '10%',
             width: '30%',
             height: '30%',
           }}
@@ -38,7 +35,6 @@ const Login: FC<LoginProps> = ({}) => {
               setUsername(e.target.value);
             }}
             label='Username'
-            style={{ padding: '1%' }}
           />
           <TextField
             value={phoneNumber}
@@ -46,17 +42,9 @@ const Login: FC<LoginProps> = ({}) => {
               setPhoneNumber(e.target.value);
             }}
             label='Phone Number'
-            style={{ padding: '1%' }}
+            style={{ margin: '1% 0' }}
           />
-          <Button
-            type='submit'
-            variant='contained'
-            color='primary'
-            style={{ marginTop: '1%' }}
-            onClick={handleLoginIn}
-          >
-            Continue
-          </Button>
+          <TealButton label='Continue' onClick={handleLogin} />
         </div>
       </Layout>
     </>

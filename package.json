@@ -4,15 +4,19 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build && next export",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
     "@emotion/react": "^11.10.0",
     "@emotion/styled": "^11.10.0",
+    "@faker-js/faker": "^7.4.0",
     "@mui/icons-material": "^5.8.4",
     "@mui/material": "^5.10.0",
+    "@tanstack/react-table": "^8.5.11",
+    "clsx": "^1.2.1",
+    "mui-datatables": "^4.2.2",
     "next": "12.2.5",
     "react": "18.2.0",
     "react-dom": "18.2.0"
