@@ -24,7 +24,7 @@ const Banner: FC<BannerProps> = ({}) => {
         width: '75%',
         height: '100px',
         margin: 'auto',
-        marginTop: '10%',
+        marginTop: '3%',
       }}
     >
       <h2>

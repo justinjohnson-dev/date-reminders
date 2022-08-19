@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import Layout from '../components/layout';
 import Banner from '../components/banner/index';
-import Table from '../components/table/index';
+import TTable from '../components/table/index';
 
 const App: NextPage = () => {
   const router = useRouter();
@@ -22,7 +22,7 @@ const App: NextPage = () => {
           <link rel='icon' href='/favicon.ico' />
         </Head>
         <Banner />
-        <Table />
+        <TTable />
       </>
     </Layout>
   );
