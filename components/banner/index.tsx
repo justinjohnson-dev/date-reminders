@@ -1,4 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
+import { fetchAllUsers } from '../../hooks/use-user';
+import TealButton from '../button';
 
 interface BannerProps {}
 
@@ -9,6 +11,7 @@ type UserInformation = {
 
 const Banner: FC<BannerProps> = ({}) => {
   const [userInformation, setUserInformation] = useState<UserInformation>({});
+  const [testData, setTestData] = useState<string>('');
 
   useEffect(() => {
     setUserInformation({
@@ -17,12 +20,18 @@ const Banner: FC<BannerProps> = ({}) => {
     });
   }, []);
 
+  const handleFetch = async () => {
+    const response = await fetchAllUsers('/api/hello');
+    console.log(response);
+    setTestData(response.message[0].name);
+  };
+
   return (
     <div
       style={{
         border: 'solid',
         width: '75%',
-        height: '100px',
+        height: 'auto',
         margin: 'auto',
         marginTop: '3%',
       }}
@@ -31,6 +40,8 @@ const Banner: FC<BannerProps> = ({}) => {
         Welcome, {userInformation.name} -- your phone number is{' '}
         {userInformation.phoneNumber}
       </h2>
+      <TealButton label='Continue' onClick={handleFetch} />
+      <h2>{testData}</h2>
     </div>
   );
 };
