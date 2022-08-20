@@ -1,13 +1,15 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type { NextApiRequest, NextApiResponse } from 'next'
+import type { NextApiRequest, NextApiResponse } from 'next';
+import { getUsers } from '../../services/user';
 
-type Data = {
-  name: string
-}
+export default function handler(req: NextApiRequest, res: NextApiResponse) {
+  const { method } = req;
 
-export default function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<Data>
-) {
-  res.status(200).json({ name: 'John Doe' })
+  switch (method) {
+    case 'GET':
+      return getUsers(res);
+    default:
+      res.setHeader('Allow', ['GET', 'POST', 'PUT', 'DELETE']);
+      res.status(405).end(`Method ${method} Not Allowed`);
+      break;
+  }
 }

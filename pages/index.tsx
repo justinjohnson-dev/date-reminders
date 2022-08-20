@@ -22,6 +22,7 @@ const App: NextPage = () => {
           <link rel='icon' href='/favicon.ico' />
         </Head>
         <Banner />
+        <h1 className='text-3xl font-bold underline'>Hello World!</h1>
         <TTable />
       </>
     </Layout>
