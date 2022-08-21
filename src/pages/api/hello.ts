@@ -1,15 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { getUsers } from '../../services/user';
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { method } = req;
+type Data = {
+  name: string;
+};
 
-  switch (method) {
-    case 'GET':
-      return getUsers(res);
-    default:
-      res.setHeader('Allow', ['GET', 'POST', 'PUT', 'DELETE']);
-      res.status(405).end(`Method ${method} Not Allowed`);
-      break;
-  }
+export default function handler(
+  req: NextApiRequest,
+  res: NextApiResponse<Data>,
+) {
+  res.status(200).json({ name: 'Justin Johnson' });
 }
