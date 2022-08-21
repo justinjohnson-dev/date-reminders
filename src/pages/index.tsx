@@ -6,12 +6,22 @@ import Layout from '../components/layout';
 import Banner from '../components/banner/index';
 import TTable from '../components/table/index';
 
+import { queryAllDateReminders } from '../graphql/api/query';
+
 const App: NextPage = () => {
   const router = useRouter();
 
   useEffect(() => {
     localStorage.getItem('user') ? router.push('/') : router.push('/login');
   }, [router]);
+
+  useEffect(() => {
+    async function fetchData() {
+      const result = await queryAllDateReminders();
+      console.log(result);
+    }
+    fetchData();
+  }, []);
 
   return (
     <Layout>
@@ -22,7 +32,6 @@ const App: NextPage = () => {
           <link rel='icon' href='/favicon.ico' />
         </Head>
         <Banner />
-        <h1 className='text-3xl font-bold underline'>Hello World!</h1>
         <TTable />
       </>
     </Layout>

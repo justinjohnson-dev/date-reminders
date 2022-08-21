@@ -1,4 +1,5 @@
-import '../styles/globals.css';
+import 'tailwindcss/tailwind.css';
+
 import type { AppProps } from 'next/app';
 import { Amplify, Auth } from 'aws-amplify';
 import awsExports from './aws-exports';
