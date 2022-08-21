@@ -2,6 +2,8 @@ import React, { FC, useEffect, useState } from 'react';
 import { fetchAllUsers } from '../../hooks/use-user';
 import TealButton from '../button';
 
+import API, { graphqlOperation } from '@aws-amplify/api';
+
 interface BannerProps {}
 
 type UserInformation = {
@@ -21,9 +23,11 @@ const Banner: FC<BannerProps> = ({}) => {
   }, []);
 
   const handleFetch = async () => {
-    const response = await fetchAllUsers('/api/hello');
-    console.log(response);
-    setTestData(response.message[0].name);
+    // const response = await fetchAllUsers('/api/hello');
+    // console.log(response);
+    // setTestData(response.message[0].name);
+    const result = await API.graphql(graphqlOperation(queryTesting));
+    console.log(result);
   };
 
   return (
@@ -47,3 +51,19 @@ const Banner: FC<BannerProps> = ({}) => {
 };
 
 export default Banner;
+
+export const queryTesting = `
+query MyQuery {
+  listDateReminders {
+    items {
+      birthdays {
+        birthdayDate
+        birthdayName
+      }
+      id
+      name
+      phone_number
+    }
+  }
+}
+`;
