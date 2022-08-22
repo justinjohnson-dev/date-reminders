@@ -8,7 +8,7 @@ interface LayoutProps {
 
 const Layout: FC<LayoutProps> = ({ children }) => {
   return (
-    <div>
+    <div className='bg-gray-50 min-h-screen'>
       <ApplicationBar />
       {children}
       <Footer />

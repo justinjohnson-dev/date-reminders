@@ -1,4 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
+import Paper from '@mui/material/Paper';
 
 interface BannerProps {}
 
@@ -18,20 +19,12 @@ const Banner: FC<BannerProps> = ({}) => {
   }, []);
 
   return (
-    <div
-      style={{
-        border: 'solid',
-        width: '75%',
-        height: 'auto',
-        margin: 'auto',
-        marginTop: '3%',
-      }}
-    >
-      <h2>
+    <Paper elevation={1} className='w-4/5 m-auto mt-10 mb-10 h-24'>
+      <h2 className='font-bold'>
         Welcome, {userInformation.name} -- your phone number is{' '}
         {userInformation.phoneNumber}
       </h2>
-    </div>
+    </Paper>
   );
 };
 
